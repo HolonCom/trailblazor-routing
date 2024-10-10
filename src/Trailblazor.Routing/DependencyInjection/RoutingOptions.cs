@@ -148,10 +148,9 @@ public sealed class RoutingOptions
     /// <typeparam name="TComponent">Type of component representing the route.</typeparam>
     /// <param name="builderAction">Builder action for configuring the route that is to be added.</param>
     /// <returns><see cref="RoutingOptions"/> for further configurations.</returns>
-    public RoutingOptions AddRoute<TComponent>(Action<RouteBuilder<TComponent>> builderAction)
-        where TComponent : IComponent
+    public RoutingOptions AddRoute(Type componentType, Action<RouteBuilder> builderAction)
     {
-        var builder = new RouteBuilder<TComponent>();
+        var builder = new RouteBuilder(componentType);
         builderAction.Invoke(builder);
 
         _internalRoutingProfile.AddRoute(builder.Build());

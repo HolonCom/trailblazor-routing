@@ -24,10 +24,19 @@ public record RoutingProfileConfiguration
     /// <typeparam name="TComponent">Type of component representing the route.</typeparam>
     /// <param name="builderAction">Builder action for configuring the route.</param>
     /// <returns><see cref="RoutingProfileConfiguration"/> for further configurations.</returns>
-    public RoutingProfileConfiguration AddRoute<TComponent>(Action<RouteBuilder<TComponent>> builderAction)
-        where TComponent : IComponent
+    //public RoutingProfileConfiguration AddRoute<TComponent>(Action<RouteBuilder<TComponent>> builderAction)
+    //    where TComponent : IComponent
+    //{
+    //    var builder = new RouteBuilder<TComponent>();
+    //    builderAction.Invoke(builder);
+
+    //    _routes.Add(builder.Build());
+    //    return this;
+    //}
+
+    public RoutingProfileConfiguration AddRoute(Type componentType, Action<RouteBuilder> builderAction)
     {
-        var builder = new RouteBuilder<TComponent>();
+        var builder = new RouteBuilder(componentType);
         builderAction.Invoke(builder);
 
         _routes.Add(builder.Build());
@@ -56,12 +65,10 @@ public record RoutingProfileConfiguration
     /// <param name="uri">URI of the route.</param>
     /// <param name="overrideBuilderAction">Builder action for overriding the route.</param>
     /// <returns><see cref="RoutingProfileConfiguration"/> for further configurations.</returns>
-    public RoutingProfileConfiguration OverrideRoute<TComponent, TOverrideComponent>(string uri, Action<RouteBuilder<TOverrideComponent>>? overrideBuilderAction = null)
-        where TComponent : IComponent
-        where TOverrideComponent : IComponent
+    public RoutingProfileConfiguration OverrideRoute(Type componentType, Type overrideComponentType, string uri, Action<RouteBuilder>? overrideBuilderAction = null)
     {
-        var route = GetRouteForComponent<TComponent>(uri);
-        var builder = new RouteBuilder<TOverrideComponent>(route);
+        var route = GetRouteForComponent(componentType, uri);
+        var builder = new RouteBuilder(overrideComponentType, route);
 
         overrideBuilderAction?.Invoke(builder);
         var overriddenRoute = builder.Build();
@@ -83,11 +90,10 @@ public record RoutingProfileConfiguration
     /// <param name="uri">URI of the route.</param>
     /// <param name="editBuilderAction">Builder action for editing the route.</param>
     /// <returns><see cref="RoutingProfileConfiguration"/> for further configurations.</returns>
-    public RoutingProfileConfiguration EditRoute<TComponent>(string uri, Action<RouteBuilder<TComponent>> editBuilderAction)
-        where TComponent : IComponent
+    public RoutingProfileConfiguration EditRoute(Type componentType, string uri, Action<RouteBuilder> editBuilderAction)
     {
-        var route = GetRouteForComponent<TComponent>(uri);
-        var builder = new RouteBuilder<TComponent>(route);
+        var route = GetRouteForComponent(componentType, uri);
+        var builder = new RouteBuilder(componentType, route);
 
         editBuilderAction.Invoke(builder);
         var editedRoute = builder.Build();
@@ -104,10 +110,9 @@ public record RoutingProfileConfiguration
     /// <typeparam name="TComponent">Type of component associated with the route.</typeparam>
     /// <param name="uri">URI of the route.</param>
     /// <returns><see cref="RoutingProfileConfiguration"/> for further configurations.</returns>
-    public RoutingProfileConfiguration RemoveRoute<TComponent>(string uri)
-        where TComponent : IComponent
+    public RoutingProfileConfiguration RemoveRoute(Type componentType, string uri)
     {
-        var route = GetRouteForComponent<TComponent>(uri);
+        var route = GetRouteForComponent(componentType, uri);
         _routes.Remove(route);
 
         return this;
@@ -118,12 +123,10 @@ public record RoutingProfileConfiguration
         return _routes;
     }
 
-    private Route GetRouteForComponent<TComponent>(string uri)
-        where TComponent : IComponent
+    private Route GetRouteForComponent(Type componentType, string uri)
     {
         uri = uri.TrimStart('/');
 
-        var componentType = typeof(TComponent);
         var route = _routes
             .Select(r =>
             {

@@ -41,6 +41,19 @@ public record Route
     /// </summary>
     /// <typeparam name="TComponent">Type of component representing the route.</typeparam>
     /// <returns>Empty route leading to the <typeparamref name="TComponent"/>.</returns>
+    public static Route Empty(Type componentType)
+    {
+        if (componentType.IsAbstract || componentType.IsInterface)
+            throw new AbstractComponentException(componentType);
+
+        return new Route() { Component = componentType, };
+    }
+
+    /// <summary>
+    /// Internally creates an empty <see cref="Route"/> from the given <typeparamref name="TComponent"/> type-parameter.
+    /// </summary>
+    /// <typeparam name="TComponent">Type of component representing the route.</typeparam>
+    /// <returns>Empty route leading to the <typeparamref name="TComponent"/>.</returns>
     public static Route Empty<TComponent>()
         where TComponent : IComponent
     {
