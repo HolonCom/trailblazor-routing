@@ -1,4 +1,5 @@
-﻿using Trailblazor.Routing.Configuration;
+﻿using System.Reflection;
+using Trailblazor.Routing.Configuration;
 
 namespace Trailblazor.Routing.DependencyInjection;
 
@@ -21,6 +22,13 @@ public interface IRoutingOptionsBuilder
     /// <param name="type">Type of <see cref="IRoutingProfile"/> implementation.</param>
     /// <returns>The <see cref="IRoutingOptionsBuilder"/> for further configurations.</returns>
     public IRoutingOptionsBuilder AddProfile(Type type);
+
+    /// <summary>
+    /// Scans for <see cref="IRoutingProfile"/> implementations in the given <paramref name="assemblies"/> and registers them.
+    /// </summary>
+    /// <param name="assemblies">Assemblies to be scanned for <see cref="IRoutingProfile"/>s.</param>
+    /// <returns>The <see cref="IRoutingOptionsBuilder"/> for further configurations.</returns>
+    public IRoutingOptionsBuilder AddProfilesFromAssemblies(params List<Assembly> assemblies);
 
     /// <summary>
     /// Allows configuring the <see cref="IRoutingConfiguration"/> using a builder action.
