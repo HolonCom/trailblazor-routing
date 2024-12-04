@@ -16,5 +16,5 @@ public interface IRouteNode : INode
     /// <summary>
     /// Type of component representing the route visually.
     /// </summary>
-    public Type ComponentType { get; }
+    public Type ComponentType { get; internal set; }
 }

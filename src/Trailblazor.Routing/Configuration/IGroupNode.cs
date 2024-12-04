@@ -6,24 +6,34 @@
 public interface IGroupNode : INode
 {
     /// <summary>
+    /// Internal nodes. This list is required for the framework to be able to add nodes to the group.
+    /// </summary>
+    internal List<INode> InternalNodes { get; }
+
+    /// <summary>
     /// Route optionally representing the group.
     /// </summary>
-    public IRouteNode? OwnRoute { get; set; }
+    public IRouteNode? OwnRouteNode { get; set; }
 
     /// <summary>
     /// Parent group of the group.
     /// </summary>
-    public IGroupNode? ParentGroup { get; }
+    public IGroupNode? ParentGroupNode { get; internal set; }
 
     /// <summary>
-    /// Child routes of the group.
+    /// Total child nodes of the group.
     /// </summary>
-    public IReadOnlyList<IRouteNode> Routes { get; }
+    public IReadOnlyList<INode> Nodes { get; }
 
     /// <summary>
-    /// Child groups of the group.
+    /// All <see cref="Nodes"/> implementing <see cref="IRouteNode"/>.
     /// </summary>
-    public IReadOnlyList<IGroupNode> Groups { get; }
+    public IReadOnlyList<IRouteNode> RouteNodes { get; }
+
+    /// <summary>
+    /// All <see cref="Nodes"/> implementing <see cref="IGroupNode"/>.
+    /// </summary>
+    public IReadOnlyList<IGroupNode> GroupNodes { get; }
 
     /// <summary>
     /// Finds the child node, or itself, with the given <paramref name="key"/>.
@@ -40,10 +50,17 @@ public interface IGroupNode : INode
     public IRouteNode? FindChildOrOwnByUri(string uri);
 
     /// <summary>
-    /// Method accumulates all child routes, and/or the owned route, whether type of represinting
-    /// component is the given <paramref name="componentType"/>.
+    /// Accumulates all child route nodes, and/or the owned route node, where the representing component
+    /// is of the given <paramref name="componentType"/>.
     /// </summary>
     /// <param name="componentType">Type of component representing the target routes.</param>
     /// <returns>The target routes.</returns>
-    public List<IRouteNode> FindChildrenAndOrOwn(Type componentType);
+    public List<IRouteNode> FindChildrenAndOrOwnByComponentType(Type componentType);
+
+    /// <summary>
+    /// Recusively accumulates <see cref="IRouteNode"/>s for the given <paramref name="componentType"/>.
+    /// </summary>
+    /// <param name="componentType">Type of component representing the target routes.</param>
+    /// <param name="routeNodes">Accumulated route nodes.</param>
+    internal void AccumulateRoutesForType(Type componentType, List<IRouteNode> routeNodes);
 }

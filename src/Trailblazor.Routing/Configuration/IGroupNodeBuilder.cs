@@ -8,12 +8,20 @@ namespace Trailblazor.Routing.Configuration;
 public interface IGroupNodeBuilder
 {
     /// <summary>
+    /// Adds a node instance to the group node that is currently being configured.
+    /// </summary>
+    /// <param name="key">Key of the node instance.</param>
+    /// <param name="node">The node instance to be added.</param>
+    /// <returns>The current builder for further group configurations.</returns>
+    public IGroupNodeBuilder AddNode(string key, INode node);
+
+    /// <summary>
     /// Adds a child group to the group node that is currently being configured.
     /// </summary>
     /// <param name="key">Key of the child group node.</param>
     /// <param name="group">Optional builder action for configuring the child group.</param>
     /// <returns>The current builder for further group configurations.</returns>
-    public IGroupNodeBuilder AddGroup(string key, Action<IGroupNodeBuilder>? group = null);
+    public IGroupNodeBuilder AddNode(string key, Action<IGroupNodeBuilder>? group = null);
 
     /// <summary>
     /// Adds a route to the group.
@@ -23,7 +31,7 @@ public interface IGroupNodeBuilder
     /// <param name="uri">Relative URI of the route.</param>
     /// <param name="route">Builder action for further configuring the route.</param>
     /// <returns>The current builder for further group configurations.</returns>
-    public IGroupNodeBuilder AddRoute<TComponent>(string key, string uri, Action<IRouteNodeBuilder>? route = null)
+    public IGroupNodeBuilder AddNode<TComponent>(string key, string uri, Action<IRouteNodeBuilder>? route = null)
         where TComponent : ComponentBase;
 
     /// <summary>
@@ -34,7 +42,7 @@ public interface IGroupNodeBuilder
     /// <param name="componentType">Type of component representing the route.</param>
     /// <param name="route">Builder action for further configuring the route.</param>
     /// <returns>The current builder for further group configurations.</returns>
-    public IGroupNodeBuilder AddRoute(string key, string uri, Type componentType, Action<IRouteNodeBuilder>? route = null);
+    public IGroupNodeBuilder AddNode(string key, string uri, Type componentType, Action<IRouteNodeBuilder>? route = null);
 
     /// <summary>
     /// Configures a route that represents the group node. 
@@ -47,7 +55,7 @@ public interface IGroupNodeBuilder
     /// <param name="uri">Relative URI of the route.</param>
     /// <param name="route">Builder action for further configuring the route.</param>
     /// <returns>The current builder for further group configurations.</returns>
-    public IGroupNodeBuilder RepresentedByRoute<TComponent>(string key, string uri, Action<IRouteNodeBuilder>? route = null)
+    public IGroupNodeBuilder RepresentedByRouteNode<TComponent>(string key, string uri, Action<IRouteNodeBuilder>? route = null)
         where TComponent : ComponentBase;
 
     /// <summary>
@@ -61,7 +69,7 @@ public interface IGroupNodeBuilder
     /// <param name="componentType">Type of component representing the route.</param>
     /// <param name="route">Builder action for further configuring the route.</param>
     /// <returns>The current builder for further group configurations.</returns>
-    public IGroupNodeBuilder RepresentedByRoute(string key, string uri, Type componentType, Action<IRouteNodeBuilder>? route = null);
+    public IGroupNodeBuilder RepresentedByRouteNode(string key, string uri, Type componentType, Action<IRouteNodeBuilder>? route = null);
 
     /// <summary>
     /// Adds metadata to the group.

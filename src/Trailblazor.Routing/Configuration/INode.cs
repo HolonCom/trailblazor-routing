@@ -11,10 +11,9 @@ public interface INode
     public string Key { get; }
 
     /// <summary>
-    /// Method gets all of the nodes metadata.
+    /// Metadata of the node. Allows for adding and removing metadata values (such as a 'hidden'-flag for a menu) to and from a node.
     /// </summary>
-    /// <returns>Metadata of the node.</returns>
-    public IReadOnlyDictionary<string, object?> GetMetadata();
+    public IReadOnlyDictionary<string, object?> Metadata { get; }
 
     /// <summary>
     /// Method fetches the nodes metadata value for the specified <paramref name="key"/> and casts it into the <typeparamref name="TValue"/>.
@@ -23,6 +22,7 @@ public interface INode
     /// <param name="key">Key of the desired value.</param>
     /// <param name="defaultValue">Optional default value in case the desired value has not been found.</param>
     /// <returns>Found metadata value for the specified <paramref name="key"/>.</returns>
+    /// <exception cref="InvalidCastException">Thrown if the fetched value is not of type <typeparamref name="TValue"/>.</exception>
     public TValue? GetMetadataValue<TValue>(string key, TValue? defaultValue = default);
 
     /// <summary>

@@ -6,24 +6,24 @@
 public interface IRoutingConfiguration
 {
     /// <summary>
-    /// Hierarchical node structure.
+    /// All nodes as a flattened list.
     /// </summary>
-    public IReadOnlyList<IGroupNode> GroupNodesInHierarchy { get; }
+    public IReadOnlyList<INode> FlattenedNodes { get; }
 
     /// <summary>
-    /// All group nodes as a flattened list.
+    /// Only top-level nodes for a hierarchical data structure.
+    /// </summary>
+    public IReadOnlyList<INode> NodesInHierarchy { get; }
+
+    /// <summary>
+    /// All <see cref="FlattenedNodes"/> of type <see cref="IGroupNode"/>.
     /// </summary>
     public IReadOnlyList<IGroupNode> FlattenedGroupNodes { get; }
 
     /// <summary>
-    /// All route nodes as a flattened list.
+    /// All <see cref="FlattenedNodes"/> of type <see cref="IRouteNode"/>.
     /// </summary>
     public IReadOnlyList<IRouteNode> FlattenedRouteNodes { get; }
-
-    /// <summary>
-    /// All nodes as a flattened list.s
-    /// </summary>
-    public IReadOnlyList<INode> FlattenedNodes { get; }
 
     /// <summary>
     /// Method finds the <see cref="INode"/> with the given <paramref name="key"/>.
