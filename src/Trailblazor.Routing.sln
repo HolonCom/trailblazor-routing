@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E7325128-834
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trailblazor.Routing.Tests", "Trailblazor.Routing.Tests\Trailblazor.Routing.Tests.csproj", "{AF6DE1B8-816D-40D2-9505-56F49D042BB9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trailblazor.Routing.App.WASM", "Trailblazor.Routing.App.WASM\Trailblazor.Routing.App.WASM.csproj", "{1AD8B226-251F-4679-B322-F06FD34F0799}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,6 +28,10 @@ Global
 		{AF6DE1B8-816D-40D2-9505-56F49D042BB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF6DE1B8-816D-40D2-9505-56F49D042BB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF6DE1B8-816D-40D2-9505-56F49D042BB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AD8B226-251F-4679-B322-F06FD34F0799}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AD8B226-251F-4679-B322-F06FD34F0799}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AD8B226-251F-4679-B322-F06FD34F0799}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AD8B226-251F-4679-B322-F06FD34F0799}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
