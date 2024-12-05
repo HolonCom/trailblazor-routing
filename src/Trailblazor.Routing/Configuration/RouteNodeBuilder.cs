@@ -1,11 +1,13 @@
-﻿namespace Trailblazor.Routing.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Trailblazor.Routing.Configuration;
 
 /// <inheritdoc/>
 public sealed class RouteNodeBuilder : IRouteNodeBuilder
 {
     private readonly RouteNode _route;
 
-    internal RouteNodeBuilder(string key, string uri, Type routeComponentType)
+    internal RouteNodeBuilder(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type routeComponentType)
     {
         _route = new()
         {

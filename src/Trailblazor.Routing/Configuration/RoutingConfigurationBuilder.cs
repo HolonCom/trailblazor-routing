@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 using Trailblazor.Routing.Configuration.Validation;
 
 namespace Trailblazor.Routing.Configuration;
@@ -23,13 +24,13 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder AddNode<TComponent>(string key, string uri, Action<IRouteNodeBuilder>? route = null)
+    public IRoutingConfigurationBuilder AddNode<TComponent>(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Action<IRouteNodeBuilder>? route = null)
     {
         return AddNode(key, uri, typeof(TComponent), route);
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder AddNode(string key, string uri, Type componentType, Action<IRouteNodeBuilder>? route = null)
+    public IRoutingConfigurationBuilder AddNode(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<IRouteNodeBuilder>? route = null)
     {
         var routeNode = RouteNode.CreateUsingBuilder(key, uri, componentType, route);
         return AddNode(routeNode);
@@ -55,13 +56,13 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder AddNodeToGroupNode<TComponent>(string targetGroupKey, string routeKey, string routeUri, Action<IRouteNodeBuilder>? route = null) where TComponent : ComponentBase
+    public IRoutingConfigurationBuilder AddNodeToGroupNode<TComponent>(string targetGroupKey, string routeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Action<IRouteNodeBuilder>? route = null) where TComponent : ComponentBase
     {
         return AddNodeToGroupNode(targetGroupKey, routeKey, routeUri, typeof(TComponent), route);
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder AddNodeToGroupNode(string targetGroupKey, string routeKey, string routeUri, Type componentType, Action<IRouteNodeBuilder>? route = null)
+    public IRoutingConfigurationBuilder AddNodeToGroupNode(string targetGroupKey, string routeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Type componentType, Action<IRouteNodeBuilder>? route = null)
     {
         var parentGroupNode = FindGroupNode(targetGroupKey) ?? throw new RoutingValidationException($"Group node with key '{targetGroupKey}' not found.");
         var routeNode = RouteNode.CreateUsingBuilder(routeKey, routeUri, componentType, route);
@@ -92,13 +93,13 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder ReplaceNode<TComponent>(string targetNodeKey, string routeUri, Action<IRouteNodeBuilder>? route = null) where TComponent : ComponentBase
+    public IRoutingConfigurationBuilder ReplaceNode<TComponent>(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Action<IRouteNodeBuilder>? route = null) where TComponent : ComponentBase
     {
         return ReplaceNode(targetNodeKey, routeUri, typeof(TComponent), route);
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, string routeUri, Type componentType, Action<IRouteNodeBuilder>? route = null)
+    public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Type componentType, Action<IRouteNodeBuilder>? route = null)
     {
         RemoveNode(targetNodeKey);
         var newRouteNode = RouteNode.CreateUsingBuilder(targetNodeKey, routeUri, componentType, route);

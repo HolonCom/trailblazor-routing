@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using System.Diagnostics.CodeAnalysis;
 using Trailblazor.Routing.Configuration.Validation;
 
 namespace Trailblazor.Routing.Configuration;
@@ -32,14 +33,14 @@ public sealed class GroupNodeBuilder : IGroupNodeBuilder
     }
 
     /// <inheritdoc/>
-    public IGroupNodeBuilder AddNode<TComponent>(string key, string uri, Action<IRouteNodeBuilder>? route = null)
+    public IGroupNodeBuilder AddNode<TComponent>(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Action<IRouteNodeBuilder>? route = null)
         where TComponent : ComponentBase
     {
         return AddNode(key, uri, typeof(TComponent), route);
     }
 
     /// <inheritdoc/>
-    public IGroupNodeBuilder AddNode(string key, string uri, Type componentType, Action<IRouteNodeBuilder>? route = null)
+    public IGroupNodeBuilder AddNode(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<IRouteNodeBuilder>? route = null)
     {
         RoutingValidationException.ThrowIfTypeIsNotAComponent(componentType);
 
@@ -48,14 +49,14 @@ public sealed class GroupNodeBuilder : IGroupNodeBuilder
     }
 
     /// <inheritdoc/>
-    public IGroupNodeBuilder RepresentedByRouteNode<TComponent>(string key, string uri, Action<IRouteNodeBuilder>? route = null)
+    public IGroupNodeBuilder RepresentedByRouteNode<TComponent>(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Action<IRouteNodeBuilder>? route = null)
         where TComponent : ComponentBase
     {
         return RepresentedByRouteNode(key, uri, typeof(TComponent), route);
     }
 
     /// <inheritdoc/>
-    public IGroupNodeBuilder RepresentedByRouteNode(string key, string uri, Type componentType, Action<IRouteNodeBuilder>? route = null)
+    public IGroupNodeBuilder RepresentedByRouteNode(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<IRouteNodeBuilder>? route = null)
     {
         RoutingValidationException.ThrowIfTypeIsNotAComponent(componentType);
 
