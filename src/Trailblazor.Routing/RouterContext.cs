@@ -16,12 +16,12 @@ public sealed record RouterContext
     public required IRouteNode? Route { get; init; }
 
     /// <summary>
+    /// Current query parameters.
+    /// </summary>
+    public IReadOnlyDictionary<string, object> RouteParameters { get; init; } = new Dictionary<string, object>();
+
+    /// <summary>
     /// Current route data.
     /// </summary>
     public required RouteData RouteData { get; init; }
-
-    /// <summary>
-    /// Current query parameters.
-    /// </summary>
-    public IReadOnlyDictionary<string, object> QueryParameters { get; init; } = new Dictionary<string, object>();
 }

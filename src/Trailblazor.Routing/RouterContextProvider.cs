@@ -1,61 +1,44 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Trailblazor.Routing.Extensions;
-using Trailblazor.Routing.Parsing;
 
 namespace Trailblazor.Routing;
 
 internal sealed class RouterContextProvider(
     NavigationManager _navigationManager,
-    INodeProvider _routeProvider,
-    IComponentParameterParser _componentParameterParser,
-    IUriParser _uriParser) : IRouterContextProvider
+    IRouteNodeResolver _routeNodeResolver) : IRouterContextProvider
 {
     private RouterContext? _routerContext;
 
     public RouterContext GetRouterContext()
     {
-        var currentUri = _navigationManager.GetRelativeUri();
-        var currentUriWithoutQueryParameters = _uriParser.GetUriWithoutQueryParameters(currentUri);
-        var queryParameters = _uriParser.GetQueryParametersFromUri(currentUri);
-
-        return _routerContext ??= CreateRouterContextFromUri(
-            currentUriWithoutQueryParameters,
-            queryParameters);
+        return _routerContext ??= CreateRouterContextFromUri();
     }
 
     public void UpdateRouterContext()
     {
-        var relativeUri = _navigationManager.GetRelativeUri();
-        var uriWithoutQueryParameters = _uriParser.GetUriWithoutQueryParameters(relativeUri);
-        var queryParameters = _uriParser.GetQueryParametersFromUri(relativeUri);
-
-        _routerContext = CreateRouterContextFromUri(
-            uriWithoutQueryParameters,
-            queryParameters);
+        _routerContext = CreateRouterContextFromUri();
     }
 
-    private RouterContext CreateRouterContextFromUri(string uri, Dictionary<string, string> queryParameters)
+    private RouterContext CreateRouterContextFromUri()
     {
-        var currentRoute = _routeProvider.FindRoute(uri);
+        var routeResult = _routeNodeResolver.ResolveRouteForUri(_navigationManager.GetRelativeUri());
         RouteData routeData;
-        Dictionary<string, object> componentQueryParameters = [];
 
-        if (currentRoute == null)
+        if (routeResult.RouteNode == null)
         {
             // TODO -> Use a NotFoundComponent instead!
             routeData = new RouteData(typeof(ComponentBase), new Dictionary<string, object?>());
         }
         else
         {
-            componentQueryParameters = _componentParameterParser.GetComponentParametersFromQueryParameters(currentRoute.ComponentType, queryParameters!);
-            routeData = new RouteData(currentRoute.ComponentType, componentQueryParameters!);
+            routeData = new RouteData(routeResult.RouteNode.ComponentType, routeResult.ComponentParameters!);
         }
 
         return new RouterContext()
         {
-            Route = currentRoute,
+            Route = routeResult.RouteNode,
+            RouteParameters = routeResult.ComponentParameters,
             RouteData = routeData,
-            QueryParameters = componentQueryParameters,
         };
     }
 }

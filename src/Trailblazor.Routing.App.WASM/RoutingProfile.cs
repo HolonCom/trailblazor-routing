@@ -11,6 +11,7 @@ internal sealed class RoutingProfile : IRoutingProfile
         builder.AddNode("Content", g =>
         {
             g.AddNode<Counter>("Counter", "/counter");
+            g.AddNode<Counter>("Counter", "/counter/{count}");
             g.AddNode<Weather>("Weather", "/weather");
         });
     }
