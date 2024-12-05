@@ -165,6 +165,34 @@ public interface IRoutingConfigurationBuilder
     public IRoutingConfigurationBuilder AddMetadataToNode(string nodeKey, string key, object value);
 
     /// <summary>
+    /// Sets the <paramref name="uri"/> that is to be redirected to, if no route for the current URI was found.
+    /// </summary>
+    /// <param name="uri">URI to redirect to if not route node for the current URI was found.</param>
+    /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
+    public IRoutingConfigurationBuilder RedirectOnNotFound([StringSyntax(StringSyntaxAttribute.Uri)] string uri);
+
+    /// <summary>
+    /// Sets the component that is to be rendered if no route for the current URI was found.
+    /// </summary>
+    /// <remarks>
+    /// This will be ignored if a <see cref="IRoutingConfiguration.NotFoundRedirectUri"/> was defined.
+    /// </remarks>
+    /// <typeparam name="TComponent">Type of component to be rendered.</typeparam>
+    /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
+    public IRoutingConfigurationBuilder UseComponentOnNotFound<TComponent>()
+        where TComponent : ComponentBase;
+
+    /// <summary>
+    /// Sets the component that is to be rendered if no route for the current URI was found.
+    /// </summary>
+    /// <remarks>
+    /// This will be ignored if a <see cref="IRoutingConfiguration.NotFoundRedirectUri"/> was defined.
+    /// </remarks>
+    /// <param name="componentType">Type of component to be rendered.</param>
+    /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
+    public IRoutingConfigurationBuilder UseComponentOnNotFound(Type componentType);
+
+    /// <summary>
     /// Completes the configuration process and builds the configured <see cref="IRoutingConfiguration"/>.
     /// </summary>
     /// <returns>The configured <see cref="IRoutingConfiguration"/>.</returns>

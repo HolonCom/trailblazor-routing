@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Trailblazor.Routing.Components;
+using Trailblazor.Routing.Configuration;
 using Trailblazor.Routing.Extensions;
 
 namespace Trailblazor.Routing;
 
 internal sealed class RouterContextProvider(
     NavigationManager _navigationManager,
+    IRoutingConfigurationProvider _routingConfigurationProvider,
     IRouteNodeResolver _routeNodeResolver) : IRouterContextProvider
 {
     private RouterContext? _routerContext;
@@ -26,8 +29,12 @@ internal sealed class RouterContextProvider(
 
         if (routeResult.RouteNode == null)
         {
-            // TODO -> Use a NotFoundComponent instead!
-            routeData = new RouteData(typeof(ComponentBase), new Dictionary<string, object?>());
+            var notFoundRedirectUri = _routingConfigurationProvider.GetRoutingConfiguration().NotFoundRedirectUri;
+            if (notFoundRedirectUri != null)
+                _navigationManager.NavigateTo(notFoundRedirectUri);
+
+            var notFoundComponentType = _routingConfigurationProvider.GetRoutingConfiguration().NotFoundComponentType;
+            routeData = new RouteData(notFoundComponentType ?? typeof(NotFound), new Dictionary<string, object?>());
         }
         else
         {

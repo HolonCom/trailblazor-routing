@@ -8,6 +8,8 @@ namespace Trailblazor.Routing.Configuration;
 public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
 {
     private readonly List<INode> _nodes = [];
+    private string? _notFoundRedirectUri;
+    private Type? _notFoundComponentType;
 
     /// <inheritdoc/>
     public IRoutingConfigurationBuilder AddNode(INode node)
@@ -159,9 +161,37 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     }
 
     /// <inheritdoc/>
+    public IRoutingConfigurationBuilder RedirectOnNotFound([StringSyntax(StringSyntaxAttribute.Uri)] string uri)
+    {
+        _notFoundRedirectUri = uri;
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public IRoutingConfigurationBuilder UseComponentOnNotFound<TComponent>()
+        where TComponent : ComponentBase
+    {
+        return UseComponentOnNotFound(typeof(TComponent));
+    }
+
+    /// <inheritdoc/>
+    public IRoutingConfigurationBuilder UseComponentOnNotFound(Type componentType)
+    {
+        RoutingValidationException.ThrowIfTypeIsNotAComponent(componentType);
+        _notFoundComponentType = componentType;
+
+        return this;
+    }
+
+    /// <inheritdoc/>
     public IRoutingConfiguration Build()
     {
-        var routingConfiguration = new RoutingConfiguration() { InternalNodesInHierarchy = _nodes, };
+        var routingConfiguration = new RoutingConfiguration()
+        {
+            InternalNodesInHierarchy = _nodes,
+            NotFoundRedirectUri = _notFoundRedirectUri,
+            NotFoundComponentType = _notFoundComponentType,
+        };
 
         foreach (var node in _nodes)
             FlattenNodesRecursively(node, routingConfiguration.InternalFlattenedNodes);

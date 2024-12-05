@@ -41,14 +41,18 @@ public sealed class TrailblazorRouter : IComponent, IHandleAfterRender, IDisposa
     /// <summary>
     /// Render fragment for content when a route has been found.
     /// </summary>
-    [Parameter, EditorRequired]
-    public required RenderFragment<RouteData> Found { get; set; }
+    [Parameter]
+    public RenderFragment<RouteData>? Found { get; set; }
 
     /// <summary>
     /// Render fragment for content when a route has not been found.
     /// </summary>
-    [Parameter, EditorRequired]
-    public required RenderFragment NotFound { get; set; }
+    /// <remarks>
+    /// You can configure the contents if not route was found for the current URI by configuring either the
+    /// <see cref="IRoutingConfiguration.NotFoundComponentType"/> or <see cref="IRoutingConfiguration.NotFoundRedirectUri"/> instead.
+    /// </remarks>
+    [Parameter]
+    public RenderFragment? NotFound { get; set; }
 
     /// <inheritdoc/>
     public void Dispose()
@@ -104,7 +108,11 @@ public sealed class TrailblazorRouter : IComponent, IHandleAfterRender, IDisposa
             builder.AddComponentParameter(1, nameof(CascadingValue<RouterContext>.Value), routerContext);
             builder.AddComponentParameter(2, nameof(CascadingValue<RouterContext>.ChildContent), (RenderFragment)(content =>
             {
-                content.AddContent(2, routerContext.RouteData != null ? Found(routerContext.RouteData) : NotFound);
+                var renderFragment = routerContext.RouteData != null && Found != null
+                    ? Found.Invoke(routerContext.RouteData)
+                    : NotFound;
+
+                content.AddContent(2, renderFragment);
             }));
             builder.CloseComponent();
         });

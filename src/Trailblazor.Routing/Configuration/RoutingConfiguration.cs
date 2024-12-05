@@ -9,4 +9,7 @@ internal sealed class RoutingConfiguration : IRoutingConfiguration
     public IReadOnlyList<INode> NodesInHierarchy => InternalNodesInHierarchy;
     public IReadOnlyList<IGroupNode> FlattenedGroupNodes => InternalFlattenedNodes.OfType<IGroupNode>().ToList();
     public IReadOnlyList<IRouteNode> FlattenedRouteNodes => InternalFlattenedNodes.OfType<IRouteNode>().ToList();
+
+    public string? NotFoundRedirectUri { get; init; }
+    public Type? NotFoundComponentType { get; init; }
 }
