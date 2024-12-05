@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Reflection;
 
-namespace Trailblazor.Routing.Parsing.Exceptions;
+namespace Trailblazor.Routing.Exceptions;
 
 public sealed class RoutingParameterException(string message) : Exception(message)
 {

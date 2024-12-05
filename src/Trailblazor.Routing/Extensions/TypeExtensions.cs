@@ -1,4 +1,4 @@
-﻿namespace Trailblazor.Routing.Parsing.Extensions;
+﻿namespace Trailblazor.Routing.Extensions;
 
 internal static class TypeExtensions
 {

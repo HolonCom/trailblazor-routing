@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Reflection;
-using Trailblazor.Routing.Parsing.Exceptions;
-using Trailblazor.Routing.Parsing.Extensions;
+using Trailblazor.Routing.Exceptions;
+using Trailblazor.Routing.Extensions;
 
 namespace Trailblazor.Routing.Parsing;
 
