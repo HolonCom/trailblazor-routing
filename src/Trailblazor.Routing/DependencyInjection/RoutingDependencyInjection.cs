@@ -24,14 +24,15 @@ public static class RoutingDependencyInjection
         var routingOptions = optionsBuilder.Build();
 
         services.AddSingleton<IRoutingOptionsProvider>(sp => new RoutingOptionsProvider(routingOptions));
-        //services.AddSingleton<IRoutingConfigurationValidator, RoutingConfigurationValidator>();
+        services.AddSingleton<IRoutingConfigurationValidator, RoutingConfigurationValidator>();
+        services.AddScoped<IRouteNodeResolver, RouteNodeResolver>();
         services.AddScoped<IRoutingConfigurationResolver, RoutingConfigurationResolver>();
         services.AddScoped<IRoutingConfigurationProvider, RoutingConfigurationProvider>();
-        //services.AddScoped<INodeProvider, NodeProvider>();
-        //services.AddScoped<IRouteNavigator, RouteNavigator>();
-        //services.AddScoped<IRouterContextProvider, RouterContextProvider>();
-        //services.AddSingleton<IUriParser, Parsing.UriParser>();
-        //services.AddSingleton<IComponentParameterParser, ComponentParameterParser>();
+        services.AddScoped<INodeProvider, NodeProvider>();
+        services.AddScoped<IRouteNavigator, RouteNavigator>();
+        services.AddScoped<IRouterContextProvider, RouterContextProvider>();
+        services.AddSingleton<IUriParser, Parsing.UriParser>();
+        services.AddSingleton<IComponentParameterParser, ComponentParameterParser>();
 
         foreach (var routingProfileType in routingOptions.RoutingProfileTypes)
             services.AddScoped(typeof(IRoutingProfile), routingProfileType);
