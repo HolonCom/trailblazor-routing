@@ -16,8 +16,20 @@ internal sealed class RouteNodeResolver(
 
         foreach (var routeNode in _routingConfigurationProvider.GetRoutingConfiguration().FlattenedRouteNodes)
         {
-            var currentUriParameters = GetUriParametersFromTheCurrentUriUsingTheRouteUriPattern(currentUriWithoutQueryParameters, routeNode.Uri);
-            if (!routeNode.Uri.Equals(currentUriWithoutQueryParameters, StringComparison.InvariantCultureIgnoreCase) && currentUriParameters.Count == 0)
+            Dictionary<string, string> currentUriParameters = [];
+            var routeUriFound = false;
+
+            foreach (var routeUri in routeNode.Uris)
+            {
+                currentUriParameters = GetUriParametersFromTheCurrentUriUsingTheRouteUriPattern(currentUriWithoutQueryParameters, routeUri);
+                if (routeUri == currentUriWithoutQueryParameters || currentUriParameters.Count != 0)
+                {
+                    routeUriFound = true;
+                    break;
+                }
+            }
+
+            if (!routeUriFound)
                 continue;
 
             var currentUriQueryParameters = _uriParser.GetQueryParametersFromUri(currentUri);

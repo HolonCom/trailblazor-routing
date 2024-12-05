@@ -49,13 +49,13 @@ internal sealed class GroupNode : Node, IGroupNode
     public IRouteNode? FindChildOrOwnByUri(string uri)
     {
         // 1. Is the own route the target?
-        if (OwnRouteNode != null && OwnRouteNode.Uri == uri)
+        if (OwnRouteNode != null && OwnRouteNode.HasUri(uri))
             return OwnRouteNode;
 
         // 2. Is any of the direct child routes the target route?
         foreach (var routeNode in RouteNodes)
         {
-            if (routeNode.Uri == uri)
+            if (routeNode.HasUri(uri))
                 return routeNode;
         }
 

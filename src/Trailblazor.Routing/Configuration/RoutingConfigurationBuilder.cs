@@ -32,7 +32,7 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     /// <inheritdoc/>
     public IRoutingConfigurationBuilder AddNode(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<IRouteNodeBuilder>? route = null)
     {
-        var routeNode = RouteNode.CreateUsingBuilder(key, uri, componentType, route);
+        var routeNode = RouteNode.CreateUsingBuilder(key, [uri], componentType, route);
         return AddNode(routeNode);
     }
 
@@ -65,7 +65,7 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     public IRoutingConfigurationBuilder AddNodeToGroupNode(string targetGroupKey, string routeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Type componentType, Action<IRouteNodeBuilder>? route = null)
     {
         var parentGroupNode = FindGroupNode(targetGroupKey) ?? throw new RoutingValidationException($"Group node with key '{targetGroupKey}' not found.");
-        var routeNode = RouteNode.CreateUsingBuilder(routeKey, routeUri, componentType, route);
+        var routeNode = RouteNode.CreateUsingBuilder(routeKey, [routeUri], componentType, route);
 
         parentGroupNode.InternalNodes.Add(routeNode);
         return this;
@@ -102,7 +102,7 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Type componentType, Action<IRouteNodeBuilder>? route = null)
     {
         RemoveNode(targetNodeKey);
-        var newRouteNode = RouteNode.CreateUsingBuilder(targetNodeKey, routeUri, componentType, route);
+        var newRouteNode = RouteNode.CreateUsingBuilder(targetNodeKey, [routeUri], componentType, route);
 
         AddNode(newRouteNode);
         return this;

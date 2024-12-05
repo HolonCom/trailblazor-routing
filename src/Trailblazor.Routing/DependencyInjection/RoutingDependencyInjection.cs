@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Trailblazor.Routing.Configuration;
 using Trailblazor.Routing.Configuration.Validation;
-using Trailblazor.Routing.Navigation;
 using Trailblazor.Routing.Parsing;
 
 namespace Trailblazor.Routing.DependencyInjection;
@@ -29,7 +28,6 @@ public static class RoutingDependencyInjection
         services.AddScoped<IRoutingConfigurationResolver, RoutingConfigurationResolver>();
         services.AddScoped<IRoutingConfigurationProvider, RoutingConfigurationProvider>();
         services.AddScoped<INodeProvider, NodeProvider>();
-        services.AddScoped<IRouteNavigator, RouteNavigator>();
         services.AddScoped<IRouterContextProvider, RouterContextProvider>();
         services.AddSingleton<IUriParser, Parsing.UriParser>();
         services.AddSingleton<IComponentParameterParser, ComponentParameterParser>();

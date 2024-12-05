@@ -1,18 +1,19 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Trailblazor.Routing.Configuration.Validation;
 
 namespace Trailblazor.Routing.Configuration;
 
 /// <inheritdoc/>
 public sealed class RouteNodeBuilder : IRouteNodeBuilder
 {
-    private readonly RouteNode _route;
+    private readonly RouteNode _routeNode;
 
-    internal RouteNodeBuilder(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type routeComponentType)
+    internal RouteNodeBuilder(string key, IEnumerable<string> uris, Type routeComponentType)
     {
-        _route = new()
+        _routeNode = new()
         {
             Key = key,
-            Uri = uri.TrimStart('/').TrimStart('\\'),
+            InternalUris = uris.Select(u => u.Trim('/').Trim('\\')).ToList(),
             ComponentType = routeComponentType,
         };
     }
@@ -20,13 +21,23 @@ public sealed class RouteNodeBuilder : IRouteNodeBuilder
     /// <inheritdoc/>
     public IRouteNodeBuilder WithMetadata(string key, object value)
     {
-        _route.SetMetadataValue(key, value);
+        _routeNode.SetMetadataValue(key, value);
+        return this;
+    }
+
+    /// <inheritdoc/>
+    public IRouteNodeBuilder WithAdditionalUri([StringSyntax(StringSyntaxAttribute.Uri)] string uri)
+    {
+        uri = uri.Trim('/').Trim('\\');
+        RoutingValidationException.ThrowIfUriAlreadyExistsForRouteNode(_routeNode, uri);
+
+        _routeNode.InternalUris.Add(uri);
         return this;
     }
 
     /// <inheritdoc/>
     public IRouteNode Build()
     {
-        return _route;
+        return _routeNode;
     }
 }

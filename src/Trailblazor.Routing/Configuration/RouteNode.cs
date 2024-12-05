@@ -4,14 +4,25 @@ namespace Trailblazor.Routing.Configuration;
 
 internal sealed class RouteNode : Node, IRouteNode
 {
-    [StringSyntax(StringSyntaxAttribute.Uri)]
-    public required string Uri { get; init; }
+    public List<string> InternalUris { get; init; } = [];
+
+    public IReadOnlyList<string> Uris => InternalUris;
     public required Type ComponentType { get; set; }
 
-    internal static IRouteNode CreateUsingBuilder(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<IRouteNodeBuilder>? builder = null)
+    internal static IRouteNode CreateUsingBuilder(string key, IEnumerable<string> uris, Type componentType, Action<IRouteNodeBuilder>? builder = null)
     {
-        var routeNodeBuilder = new RouteNodeBuilder(key, uri, componentType);
+        var routeNodeBuilder = new RouteNodeBuilder(key, uris, componentType);
         builder?.Invoke(routeNodeBuilder);
         return routeNodeBuilder.Build();
+    }
+
+    /// <summary>
+    /// Determines whether any of the <see cref="Uris"/> is the given <paramref name="uri"/>.
+    /// </summary>
+    /// <param name="uri">URI to be looked for.</param>
+    /// <returns><see langword="true"/> if the <paramref name="uri"/> has been found.</returns>
+    public bool HasUri([StringSyntax(StringSyntaxAttribute.Uri)] string uri)
+    {
+        return Uris.Any(u => u == uri);
     }
 }

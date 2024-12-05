@@ -44,7 +44,7 @@ public sealed class GroupNodeBuilder : IGroupNodeBuilder
     {
         RoutingValidationException.ThrowIfTypeIsNotAComponent(componentType);
 
-        var routeNode = RouteNode.CreateUsingBuilder(key, uri, componentType, route);
+        var routeNode = RouteNode.CreateUsingBuilder(key, [uri], componentType, route);
         return AddNode(key, routeNode);
     }
 
@@ -60,7 +60,7 @@ public sealed class GroupNodeBuilder : IGroupNodeBuilder
     {
         RoutingValidationException.ThrowIfTypeIsNotAComponent(componentType);
 
-        var routeNode = RouteNode.CreateUsingBuilder(key, uri, componentType, route);
+        var routeNode = RouteNode.CreateUsingBuilder(key, [uri], componentType, route);
         _groupNode.OwnRouteNode = routeNode;
 
         return this;
