@@ -16,16 +16,6 @@ public interface IRoutingConfiguration
     public IReadOnlyList<INode> NodesInHierarchy { get; }
 
     /// <summary>
-    /// All <see cref="FlattenedNodes"/> of type <see cref="IGroupNode"/>.
-    /// </summary>
-    public IReadOnlyList<IGroupNode> FlattenedGroupNodes { get; }
-
-    /// <summary>
-    /// All <see cref="FlattenedNodes"/> of type <see cref="IRouteNode"/>.
-    /// </summary>
-    public IReadOnlyList<IRouteNode> FlattenedRouteNodes { get; }
-
-    /// <summary>
     /// URI to be redirected to if no route node for the current URI was found.
     /// </summary>
     public string? NotFoundRedirectUri { get; }

@@ -1,4 +1,6 @@
-﻿namespace Trailblazor.Routing.Configuration;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Trailblazor.Routing.Configuration;
 
 /// <summary>
 /// Node in a routing configuration.
@@ -6,14 +8,73 @@
 public interface INode
 {
     /// <summary>
+    /// Internal nodes. This list is required for the framework to be able to add nodes to the group.
+    /// </summary>
+    internal List<INode> InternalNodes { get; }
+
+    /// <summary>
+    /// Internally mutable collection of <see cref="Uris"/>.
+    /// </summary>
+    internal List<string> InternalUris { get; }
+
+    /// <summary>
     /// Unique key of the node.
     /// </summary>
     public string Key { get; }
 
     /// <summary>
+    /// Unique relative URIs of the route.
+    /// </summary>
+    public IReadOnlyList<string> Uris { get; }
+
+    /// <summary>
+    /// Type of component representing the route visually.
+    /// </summary>
+    public Type? ComponentType { get; internal set; }
+
+    /// <summary>
+    /// Parent group of the group.
+    /// </summary>
+    public INode? ParentNode { get; internal set; }
+
+    /// <summary>
+    /// Total child nodes of the group.
+    /// </summary>
+    public IReadOnlyList<INode> Nodes { get; }
+
+    /// <summary>
     /// Metadata of the node. Allows for adding and removing metadata values (such as a 'hidden'-flag for a menu) to and from a node.
     /// </summary>
     public IReadOnlyDictionary<string, object?> Metadata { get; }
+
+    /// <summary>
+    /// Determines whether any of the <see cref="Uris"/> is the given <paramref name="uri"/>.
+    /// </summary>
+    /// <param name="uri">URI to be looked for.</param>
+    /// <returns><see langword="true"/> if the <paramref name="uri"/> has been found.</returns>
+    public bool HasUri([StringSyntax(StringSyntaxAttribute.Uri)] string uri);
+
+    /// <summary>
+    /// Finds the child node, or itself, with the given <paramref name="key"/>.
+    /// </summary>
+    /// <param name="key">Key of the target node.</param>
+    /// <returns>The target node if found.</returns>
+    public INode? FindChildOrItselfByKey(string key);
+
+    /// <summary>
+    /// Finds the child route, or the owned route, with the given <paramref name="uri"/>.
+    /// </summary>
+    /// <param name="uri">URI of the target route.</param>
+    /// <returns>The target route if found.</returns>
+    public INode? FindChildOrOwnByUri(string uri);
+
+    /// <summary>
+    /// Accumulates all child route nodes, and/or the owned route node, where the representing component
+    /// is of the given <paramref name="componentType"/>.
+    /// </summary>
+    /// <param name="componentType">Type of component representing the target routes.</param>
+    /// <returns>The target routes.</returns>
+    public List<INode> FindChildrenAndOrOwnByComponentType(Type componentType);
 
     /// <summary>
     /// Method fetches the nodes metadata value for the specified <paramref name="key"/> and casts it into the <typeparamref name="TValue"/>.
@@ -52,4 +113,11 @@ public interface INode
     /// <param name="key">Key that is to be checked for.</param>
     /// <returns><see langword="true"/> if the nodes metadata contains a value with the specified <paramref name="key"/>.</returns>
     public bool HasMetadataValue(string key);
+
+    /// <summary>
+    /// Recusively accumulates <see cref="INode"/>s for the given <paramref name="componentType"/>.
+    /// </summary>
+    /// <param name="componentType">Type of component representing the target routes.</param>
+    /// <param name="nodes">Accumulated route nodes.</param>
+    internal void AccumulateRoutesForType(Type componentType, List<INode> nodes);
 }

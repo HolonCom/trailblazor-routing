@@ -6,21 +6,11 @@ internal sealed class NodeProvider(IRoutingConfigurationProvider _routingConfigu
 {
     public INode? FindNode(string key)
     {
-        return _routingConfigurationProvider.GetRoutingConfiguration().FlattenedGroupNodes.SingleOrDefault(x => x.Key == key);
+        return _routingConfigurationProvider.GetRoutingConfiguration().FlattenedNodes.SingleOrDefault(x => x.Key == key);
     }
 
-    public IRouteNode? FindRouteNode(string key)
+    public INode? FindNodeByUri(string uri)
     {
-        return FindNode(key) as IRouteNode;
-    }
-
-    public IRouteNode? FindRouteNodeByUri(string uri)
-    {
-        return _routingConfigurationProvider.GetRoutingConfiguration().FlattenedRouteNodes.SingleOrDefault(x => x.HasUri(uri));
-    }
-
-    public IGroupNode? FindGroupNode(string key)
-    {
-        return FindNode(key) as IGroupNode;
+        return _routingConfigurationProvider.GetRoutingConfiguration().FlattenedNodes.SingleOrDefault(x => x.HasUri(uri));
     }
 }

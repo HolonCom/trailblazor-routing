@@ -13,7 +13,7 @@ public sealed record RouterContext
     /// <summary>
     /// Current route.
     /// </summary>
-    public required IRouteNode? Route { get; init; }
+    public required INode? RouteNode { get; init; }
 
     /// <summary>
     /// Current query parameters.

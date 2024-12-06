@@ -6,9 +6,6 @@ namespace Trailblazor.Routing.Configuration;
 /// <summary>
 /// Builder for the <see cref="IRoutingConfiguration"/>.
 /// </summary>
-/// <remarks>
-/// TODO -> Document the order of the actions!
-/// </remarks>
 public interface IRoutingConfigurationBuilder
 {
     /// <summary>
@@ -24,7 +21,7 @@ public interface IRoutingConfigurationBuilder
     /// <param name="key">Key of the child group node.</param>
     /// <param name="group">Optional builder action for configuring the child group.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNode(string key, Action<IGroupNodeBuilder>? group = null);
+    public IRoutingConfigurationBuilder AddNode(string key, Action<INodeBuilder>? group = null);
 
     /// <summary>
     /// Adds a route node to the configuration.
@@ -34,7 +31,7 @@ public interface IRoutingConfigurationBuilder
     /// <param name="uri">Unique relative URI of the route.</param>
     /// <param name="route">Builder action for further configuring the route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNode<TComponent>(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Action<IRouteNodeBuilder>? route = null);
+    public IRoutingConfigurationBuilder AddNode<TComponent>(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Action<INodeBuilder>? route = null);
 
     /// <summary>
     /// Adds a route node to the configuration.
@@ -44,7 +41,7 @@ public interface IRoutingConfigurationBuilder
     /// <param name="componentType">Type of component representing the route node.</param>
     /// <param name="route">Builder action for further configuring the route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNode(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<IRouteNodeBuilder>? route = null);
+    public IRoutingConfigurationBuilder AddNode(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<INodeBuilder>? route = null);
 
     /// <summary>
     /// Adds an instance of a node to the group node with the <paramref name="targetGroupNodeKey"/>.
@@ -52,7 +49,7 @@ public interface IRoutingConfigurationBuilder
     /// <param name="targetGroupNodeKey">Key of the target group node.</param>
     /// <param name="node">Instance of a node.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNodeToGroupNode(string targetGroupNodeKey, INode node);
+    public IRoutingConfigurationBuilder AddNodeToNode(string targetGroupNodeKey, INode node);
 
     /// <summary>
     /// Adds a new group to the group with the given <paramref name="targetGroupKey"/>.
@@ -61,7 +58,7 @@ public interface IRoutingConfigurationBuilder
     /// <param name="groupKey">Key of the group.</param>
     /// <param name="group">Builder action to further configure the new group.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNodeToGroupNode(string targetGroupKey, string groupKey, Action<IGroupNodeBuilder>? group = null);
+    public IRoutingConfigurationBuilder AddNodeToNode(string targetGroupKey, string groupKey, Action<INodeBuilder>? group = null);
 
     /// <summary>
     /// Adds a new route to the group with the given <paramref name="targetGroupKey"/>.
@@ -72,7 +69,7 @@ public interface IRoutingConfigurationBuilder
     /// <param name="routeUri">URI of the route.</param>
     /// <param name="route">Builder action for further configuring the new route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNodeToGroupNode<TComponent>(string targetGroupKey, string routeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Action<IRouteNodeBuilder>? route = null)
+    public IRoutingConfigurationBuilder AddNodeToNode<TComponent>(string targetGroupKey, string routeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Action<INodeBuilder>? route = null)
         where TComponent : ComponentBase;
 
     /// <summary>
@@ -84,7 +81,7 @@ public interface IRoutingConfigurationBuilder
     /// <param name="componentType">Type of component representing the route.</param>
     /// <param name="route">Builder action for further configuring the new route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNodeToGroupNode(string targetGroupKey, string routeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Type componentType, Action<IRouteNodeBuilder>? route = null);
+    public IRoutingConfigurationBuilder AddNodeToNode(string targetGroupKey, string routeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Type componentType, Action<INodeBuilder>? route = null);
 
     /// <summary>
     /// Replaces the node with the given <paramref name="targetNodeKey"/> with the <paramref name="node"/> instance.
@@ -100,7 +97,7 @@ public interface IRoutingConfigurationBuilder
     /// <param name="targetNodeKey">Key of the group that is to be replaced.</param>
     /// <param name="group">Builder action for configuring the group node.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, Action<IGroupNodeBuilder> group);
+    public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, Action<INodeBuilder> group);
 
     /// <summary>
     /// Replaces the route with the given <paramref name="targetNodeKey"/> with the newly configured route.
@@ -110,7 +107,7 @@ public interface IRoutingConfigurationBuilder
     /// <param name="routeUri">URI of the route.</param>
     /// <param name="route">Builder action for further configuring the new route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder ReplaceNode<TComponent>(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Action<IRouteNodeBuilder>? route = null)
+    public IRoutingConfigurationBuilder ReplaceNode<TComponent>(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Action<INodeBuilder>? route = null)
         where TComponent : ComponentBase;
 
     /// <summary>
@@ -121,7 +118,7 @@ public interface IRoutingConfigurationBuilder
     /// <param name="componentType">Type of component representing the route.</param>
     /// <param name="route">Builder action for further configuring the new route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Type componentType, Action<IRouteNodeBuilder>? route = null);
+    public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Type componentType, Action<INodeBuilder>? route = null);
 
     /// <summary>
     /// Replaces the representing component of a route with the given <paramref name="key"/> with the specified <typeparamref name="TComponent"/>.
@@ -129,7 +126,7 @@ public interface IRoutingConfigurationBuilder
     /// <typeparam name="TComponent">Type of component representing the route.</typeparam>
     /// <param name="key">Key of the route whose component is to be swapped.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder ReplaceRouteNodeComponent<TComponent>(string key)
+    public IRoutingConfigurationBuilder ReplaceNodeComponent<TComponent>(string key)
         where TComponent : ComponentBase;
 
     /// <summary>
@@ -138,7 +135,7 @@ public interface IRoutingConfigurationBuilder
     /// <param name="key">Key of the route whose component is to be swapped.</param>
     /// <param name="componentType">Type of component representing the route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder ReplaceRouteNodeComponent(string key, Type componentType);
+    public IRoutingConfigurationBuilder ReplaceNodeComponent(string key, Type componentType);
 
     /// <summary>
     /// Moves the node with the given <paramref name="nodeKey"/> to the group node with the given <paramref name="targetGroupKey"/>.
@@ -146,7 +143,7 @@ public interface IRoutingConfigurationBuilder
     /// <param name="nodeKey">Key of the node that is to be moved.</param>
     /// <param name="targetGroupKey">Key of the target parent group node.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder MoveNodeToGroupNode(string nodeKey, string targetGroupKey);
+    public IRoutingConfigurationBuilder MoveNodeToNode(string nodeKey, string targetGroupKey);
 
     /// <summary>
     /// Removes the node with the given <paramref name="key"/> from the configuration, if it has been found..

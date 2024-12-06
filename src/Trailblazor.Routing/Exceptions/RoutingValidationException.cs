@@ -33,7 +33,7 @@ public sealed class RoutingValidationException : Exception
             throw new RoutingValidationException($"Node with key '{key}' could not be found in action '{actionName}'.");
     }
 
-    internal static void ThrowIfUriAlreadyExistsForRouteNode(IRouteNode routeNode, string uri)
+    internal static void ThrowIfUriAlreadyExistsForRouteNode(INode routeNode, string uri)
     {
         if (routeNode.HasUri(uri))
             throw new RoutingValidationException($"Node with key '{routeNode.Key}' already has an URI '{uri}'.");

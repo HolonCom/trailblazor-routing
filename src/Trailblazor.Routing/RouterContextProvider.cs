@@ -43,7 +43,7 @@ internal sealed class RouterContextProvider(
 
         return new RouterContext()
         {
-            Route = routeResult.RouteNode,
+            RouteNode = routeResult.RouteNode,
             RouteParameters = routeResult.ComponentParameters,
             RouteData = routeData,
         };

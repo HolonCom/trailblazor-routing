@@ -10,7 +10,7 @@ internal sealed class RoutingProfile : IRoutingProfile
         builder.AddNode<Home>("Home", "/");
         builder.AddNode("Content", g =>
         {
-            g.AddNode<Counter>("Counter", "/counter", n => n.WithAdditionalUri("/counter/{count}"));
+            g.AddNode<Counter>("Counter", "/counter", n => n.WithUri("/counter/{count}"));
             g.AddNode<Weather>("Weather", "/weather");
         });
     }

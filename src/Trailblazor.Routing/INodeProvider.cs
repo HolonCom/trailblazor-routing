@@ -8,7 +8,5 @@ namespace Trailblazor.Routing;
 public interface INodeProvider
 {
     public INode? FindNode(string key);
-    public IRouteNode? FindRouteNode(string key);
-    public IRouteNode? FindRouteNodeByUri(string uri);
-    public IGroupNode? FindGroupNode(string key);
+    public INode? FindNodeByUri(string uri);
 }

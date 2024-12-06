@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Trailblazor.Routing.Configuration;
+using Trailblazor.Routing.Configuration.Validation;
 using Trailblazor.Routing.Parsing;
 
 namespace Trailblazor.Routing;
@@ -14,7 +15,7 @@ internal sealed class RouteNodeResolver(
         currentUri = currentUri.Trim('/');
         var currentUriWithoutQueryParameters = _uriParser.GetUriWithoutQueryParameters(currentUri);
 
-        foreach (var routeNode in _routingConfigurationProvider.GetRoutingConfiguration().FlattenedRouteNodes)
+        foreach (var routeNode in _routingConfigurationProvider.GetRoutingConfiguration().FlattenedNodes)
         {
             Dictionary<string, string> currentUriParameters = [];
             var routeUriFound = false;
@@ -31,6 +32,9 @@ internal sealed class RouteNodeResolver(
 
             if (!routeUriFound)
                 continue;
+
+            if (routeNode.ComponentType == null)
+                throw new RoutingValidationException($"The node with the key '{routeNode.Key}' matches the current relative URI but has no associated component type.");
 
             var currentUriQueryParameters = _uriParser.GetQueryParametersFromUri(currentUri);
             return new RouteResolveResult()
