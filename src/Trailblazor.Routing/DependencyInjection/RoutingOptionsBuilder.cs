@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using Trailblazor.Routing.Configuration;
-using Trailblazor.Routing.Configuration.Validation;
+using Trailblazor.Routing.Exceptions;
 
 namespace Trailblazor.Routing.DependencyInjection;
 

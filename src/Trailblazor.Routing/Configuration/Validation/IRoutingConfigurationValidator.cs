@@ -1,4 +1,6 @@
-﻿namespace Trailblazor.Routing.Configuration.Validation;
+﻿using Trailblazor.Routing.Exceptions;
+
+namespace Trailblazor.Routing.Configuration.Validation;
 
 /// <summary>
 /// Service validates a given <see cref="IRoutingConfiguration"/> for potential problems.

@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
+using Trailblazor.Routing.Configuration;
 
-namespace Trailblazor.Routing.Configuration.Validation;
+namespace Trailblazor.Routing.Exceptions;
 
 /// <summary>
 /// Exception is being thrown when routing validation errors arise.

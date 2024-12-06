@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Trailblazor.Routing.Configuration;
-using Trailblazor.Routing.Configuration.Validation;
+using Trailblazor.Routing.Exceptions;
 using Trailblazor.Routing.Parsing;
 
 namespace Trailblazor.Routing;

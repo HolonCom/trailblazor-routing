@@ -3,9 +3,13 @@ using System.Reflection;
 
 namespace Trailblazor.Routing.Exceptions;
 
+/// <summary>
+/// Exception expresses an exception with the parameters of a route or component.
+/// </summary>
+/// <param name="message">Message of the exception.</param>
 public sealed class RoutingParameterException(string message) : Exception(message)
 {
-    public static void ThrowIfPropertyDoesntHaveParameterAttribute(PropertyInfo propertyInfo, string componentName)
+    internal static void ThrowIfPropertyDoesntHaveParameterAttribute(PropertyInfo propertyInfo, string componentName)
     {
         var parameterAttribute = propertyInfo.GetCustomAttribute<ParameterAttribute>();
         if (parameterAttribute != null)
