@@ -4,18 +4,26 @@ using Trailblazor.Routing.DependencyInjection;
 
 namespace Trailblazor.Routing.Configuration;
 
-// TODO -> Construct all nodes, create configured relationships and then add them to the IRoutingConfigurationBuilder
-
 internal sealed class InternalScanningProfile(IRoutingOptionsProvider _routingOptionsProvider) : IRoutingProfile
 {
     public void ConfigureRoutes(IRoutingConfigurationBuilder builder)
     {
         var nodeComponentTypes = ScanAssembliesForComponentTypes();
+        var nodes = new List<(INode Node, string? ParentNodeKey)>();
+
         foreach (var nodeComponentType in nodeComponentTypes)
-            ConfigureNodeFromType(builder, nodeComponentType);
+            CreateNodeFromType(nodes, nodeComponentType);
+
+        foreach ((INode node, string? parentNodeKey) in nodes.OrderBy(n => n.ParentNodeKey == null))
+        {
+            if (parentNodeKey == null)
+                builder.AddNode(node);
+            else
+                builder.AddNodeToNode(parentNodeKey, node);
+        }
     }
 
-    private void ConfigureNodeFromType(IRoutingConfigurationBuilder builder, Type nodeComponentType)
+    private void CreateNodeFromType(List<(INode Node, string? ParentNodeKey)> nodes, Type nodeComponentType)
     {
         var nodeUris = nodeComponentType.GetCustomAttributes<RouteAttribute>().Select(a => a.Template).ToList();
         if (nodeUris.Count == 0)
@@ -25,35 +33,16 @@ internal sealed class InternalScanningProfile(IRoutingOptionsProvider _routingOp
         var nodeParentKey = nodeComponentType.GetCustomAttribute<NodeParentAttribute>()?.ParentNodeKey;
         var nodeMetadata = nodeComponentType.GetCustomAttributes<NodeMetadataAttribute>().Select(a => new KeyValuePair<string, object>(a.MetadataKey, a.MetadataValue)).ToDictionary();
 
-        if (nodeParentKey != null)
+        var node = Node.CreateUsingBuilder(nodeKey, nodeUris, componentType: nodeComponentType, builder: n =>
         {
-            builder.AddNodeToNode(nodeParentKey, nodeKey, nodeUris.First(), nodeComponentType, n =>
-            {
-                AddAdditionalUrisToNodeBuilder(n, nodeUris);
-                AddMetadataToNodeBuilder(n, nodeMetadata);
-            });
-        }
-        else
-        {
-            builder.AddNode(nodeKey, nodeUris.First(), nodeComponentType, n =>
-            {
-                AddAdditionalUrisToNodeBuilder(n, nodeUris);
-                AddMetadataToNodeBuilder(n, nodeMetadata);
-            });
-        }
-    }
+            foreach (var metadata in nodeMetadata)
+                n.WithMetadata(metadata.Key, metadata.Value);
 
-    private void AddMetadataToNodeBuilder(INodeBuilder builder, Dictionary<string, object> nodeMetadata)
-    {
-        foreach (var metadata in nodeMetadata)
-            builder.WithMetadata(metadata.Key, metadata.Value);
-    }
+            foreach (var routeUri in nodeUris.Skip(1))
+                n.WithUri(routeUri);
+        });
 
-    private void AddAdditionalUrisToNodeBuilder(INodeBuilder builder, List<string> routeUris)
-    {
-        var additionalRouteUris = routeUris.Skip(1).ToList();
-        foreach (var routeUri in additionalRouteUris)
-            builder.WithUri(routeUri);
+        nodes.Add((node, nodeParentKey));
     }
 
     private List<Type> ScanAssembliesForComponentTypes()
