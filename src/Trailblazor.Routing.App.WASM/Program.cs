@@ -16,7 +16,10 @@ public class Program
         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
         builder.Services.AddTrailblazorRouting(options =>
         {
-            options.AddProfilesFromAssemblies(Assembly.Load("Trailblazor.Routing.App.WASM"));
+            var assembly = Assembly.Load("Trailblazor.Routing.App.WASM");
+
+            options.AddProfilesFromAssemblies(assembly);
+            options.ScanForNodesInAssemblies(assembly);
         });
 
         await builder.Build().RunAsync();

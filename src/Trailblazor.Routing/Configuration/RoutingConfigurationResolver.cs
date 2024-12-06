@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 using Trailblazor.Routing.Configuration.Validation;
 using Trailblazor.Routing.DependencyInjection;
 
@@ -15,7 +16,8 @@ internal sealed class RoutingConfigurationResolver(
         try
         {
             var routingConfigurationBuilder = new RoutingConfigurationBuilder();
-            var routingProfiles = _serviceProvider.GetServices<IRoutingProfile>();
+            var routingProfiles = _serviceProvider.GetServices<IRoutingProfile>().Concat([new InternalScanningProfile(_routingOptionsProvider)]);
+
             foreach (var profile in routingProfiles)
                 profile.ConfigureRoutes(routingConfigurationBuilder);
 
