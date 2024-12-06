@@ -38,8 +38,7 @@ internal sealed class InternalScanningProfile(IRoutingOptionsProvider _routingOp
             foreach (var metadata in nodeMetadata)
                 n.WithMetadata(metadata.Key, metadata.Value);
 
-            foreach (var routeUri in nodeUris.Skip(1))
-                n.WithUri(routeUri);
+            n.WithUris(nodeUris.Skip(1).ToList());
         });
 
         nodes.Add((node, nodeParentKey));

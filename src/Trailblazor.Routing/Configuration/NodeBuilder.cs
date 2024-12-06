@@ -21,12 +21,13 @@ public sealed class NodeBuilder : INodeBuilder
     }
 
     /// <inheritdoc/>
-    public INodeBuilder WithUri([StringSyntax(StringSyntaxAttribute.Uri)] string uri)
+    public INodeBuilder WithUris(params List<string> uris)
     {
-        uri = uri.Trim('/').Trim('\\');
-        RoutingValidationException.ThrowIfUriAlreadyExistsForRouteNode(_node, uri);
+        uris = uris.Select(u => u.Trim('/').Trim('\\')).ToList();
+        foreach (var uri in uris)
+            RoutingValidationException.ThrowIfUriAlreadyExistsForRouteNode(_node, uri);
 
-        _node.InternalUris.Add(uri);
+        _node.InternalUris.AddRange(uris);
         return this;
     }
 

@@ -9,14 +9,14 @@ namespace Trailblazor.Routing.Configuration;
 public interface INodeBuilder
 {
     /// <summary>
-    /// Adds an additional <paramref name="uri"/> to the node.
+    /// Adds additional <paramref name="uris"/> to the node.
     /// </summary>
     /// <remarks>
-    /// This <paramref name="uri"/> obivously has to be unique.
+    /// This <paramref name="uris"/> obivously have to be unique.
     /// </remarks>
-    /// <param name="uri">Additional URI to the node.</param>
+    /// <param name="uris">Additional URIs to the node.</param>
     /// <returns>The <see cref="INodeBuilder"/> for further configurations.</returns>
-    public INodeBuilder WithUri([StringSyntax(StringSyntaxAttribute.Uri)] string uri);
+    public INodeBuilder WithUris(params List<string> uris);
 
     /// <summary>
     /// Adds a node.
