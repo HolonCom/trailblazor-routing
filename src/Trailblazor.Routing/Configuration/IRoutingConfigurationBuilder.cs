@@ -16,12 +16,12 @@ public interface IRoutingConfigurationBuilder
     public IRoutingConfigurationBuilder AddNode(INode node);
 
     /// <summary>
-    /// Adds a group node to the configuration.
+    /// Adds a node to the configuration.
     /// </summary>
-    /// <param name="key">Key of the child group node.</param>
-    /// <param name="group">Optional builder action for configuring the child group.</param>
+    /// <param name="key">Key of the child node.</param>
+    /// <param name="builder">Optional builder action for configuring the child node.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNode(string key, Action<INodeBuilder>? group = null);
+    public IRoutingConfigurationBuilder AddNode(string key, Action<INodeBuilder>? builder = null);
 
     /// <summary>
     /// Adds a route node to the configuration.
@@ -29,9 +29,9 @@ public interface IRoutingConfigurationBuilder
     /// <typeparam name="TComponent">Type of component representing the route node.</typeparam>
     /// <param name="key">Unique key of the route.</param>
     /// <param name="uri">Unique relative URI of the route.</param>
-    /// <param name="route">Builder action for further configuring the route.</param>
+    /// <param name="builder">Builder action for further configuring the route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNode<TComponent>(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Action<INodeBuilder>? route = null);
+    public IRoutingConfigurationBuilder AddNode<TComponent>(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Action<INodeBuilder>? builder = null);
 
     /// <summary>
     /// Adds a route node to the configuration.
@@ -39,49 +39,49 @@ public interface IRoutingConfigurationBuilder
     /// <param name="key">Unique key of the route.</param>
     /// <param name="uri">Unique relative URI of the route.</param>
     /// <param name="componentType">Type of component representing the route node.</param>
-    /// <param name="route">Builder action for further configuring the route.</param>
+    /// <param name="builder">Builder action for further configuring the route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNode(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<INodeBuilder>? route = null);
+    public IRoutingConfigurationBuilder AddNode(string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<INodeBuilder>? builder = null);
 
     /// <summary>
-    /// Adds an instance of a node to the group node with the <paramref name="targetGroupNodeKey"/>.
+    /// Adds an instance of a node to the node with the <paramref name="targetNodeKey"/>.
     /// </summary>
-    /// <param name="targetGroupNodeKey">Key of the target group node.</param>
+    /// <param name="targetNodeKey">Key of the target node.</param>
     /// <param name="node">Instance of a node.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNodeToNode(string targetGroupNodeKey, INode node);
+    public IRoutingConfigurationBuilder AddNodeToNode(string targetNodeKey, INode node);
 
     /// <summary>
-    /// Adds a new group to the group with the given <paramref name="targetGroupKey"/>.
+    /// Adds a new node to the node with the given <paramref name="targetNodeKey"/>.
     /// </summary>
-    /// <param name="targetGroupKey">Key of the target parent group.</param>
-    /// <param name="groupKey">Key of the group.</param>
-    /// <param name="group">Builder action to further configure the new group.</param>
+    /// <param name="targetNodeKey">Key of the target parent node.</param>
+    /// <param name="key">Key of the node.</param>
+    /// <param name="builder">Builder action to further configure the new node.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNodeToNode(string targetGroupKey, string groupKey, Action<INodeBuilder>? group = null);
+    public IRoutingConfigurationBuilder AddNodeToNode(string targetNodeKey, string key, Action<INodeBuilder>? builder = null);
 
     /// <summary>
-    /// Adds a new route to the group with the given <paramref name="targetGroupKey"/>.
+    /// Adds a new route to the node with the given <paramref name="targetNodeKey"/>.
     /// </summary>
     /// <typeparam name="TComponent">Type of component representing the route.</typeparam>
-    /// <param name="targetGroupKey">Key of the target parent group.</param>
-    /// <param name="routeKey">Key of the route.</param>
-    /// <param name="routeUri">URI of the route.</param>
-    /// <param name="route">Builder action for further configuring the new route.</param>
+    /// <param name="targetNodeKey">Key of the target parent node.</param>
+    /// <param name="key">Key of the route.</param>
+    /// <param name="uri">URI of the route.</param>
+    /// <param name="builder">Builder action for further configuring the new route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNodeToNode<TComponent>(string targetGroupKey, string routeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Action<INodeBuilder>? route = null)
+    public IRoutingConfigurationBuilder AddNodeToNode<TComponent>(string targetNodeKey, string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Action<INodeBuilder>? builder = null)
         where TComponent : ComponentBase;
 
     /// <summary>
-    /// Adds a new route to the group with the given <paramref name="targetGroupKey"/>.
+    /// Adds a new route to the node with the given <paramref name="targetNodeKey"/>.
     /// </summary>
-    /// <param name="targetGroupKey">Key of the target parent group.</param>
-    /// <param name="routeKey">Key of the route.</param>
-    /// <param name="routeUri">URI of the route.</param>
+    /// <param name="targetNodeKey">Key of the target parent node.</param>
+    /// <param name="key">Key of the route.</param>
+    /// <param name="uri">URI of the route.</param>
     /// <param name="componentType">Type of component representing the route.</param>
-    /// <param name="route">Builder action for further configuring the new route.</param>
+    /// <param name="builder">Builder action for further configuring the new route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddNodeToNode(string targetGroupKey, string routeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Type componentType, Action<INodeBuilder>? route = null);
+    public IRoutingConfigurationBuilder AddNodeToNode(string targetNodeKey, string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<INodeBuilder>? builder = null);
 
     /// <summary>
     /// Replaces the node with the given <paramref name="targetNodeKey"/> with the <paramref name="node"/> instance.
@@ -92,33 +92,33 @@ public interface IRoutingConfigurationBuilder
     public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, INode node);
 
     /// <summary>
-    /// Replaces the group node with the given <paramref name="targetNodeKey"/> with the group node configured using the <paramref name="group"/> builder action.
+    /// Replaces the node with the given <paramref name="targetNodeKey"/> with the node configured using the <paramref name="builder"/> builder action.
     /// </summary>
-    /// <param name="targetNodeKey">Key of the group that is to be replaced.</param>
-    /// <param name="group">Builder action for configuring the group node.</param>
+    /// <param name="targetNodeKey">Key of the node that is to be replaced.</param>
+    /// <param name="builder">Builder action for configuring the node.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, Action<INodeBuilder> group);
+    public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, Action<INodeBuilder> builder);
 
     /// <summary>
     /// Replaces the route with the given <paramref name="targetNodeKey"/> with the newly configured route.
     /// </summary>
     /// <typeparam name="TComponent">Type of component representing the route.</typeparam>
     /// <param name="targetNodeKey">Key of the route.</param>
-    /// <param name="routeUri">URI of the route.</param>
-    /// <param name="route">Builder action for further configuring the new route.</param>
+    /// <param name="uri">URI of the route.</param>
+    /// <param name="builder">Builder action for further configuring the new route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder ReplaceNode<TComponent>(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Action<INodeBuilder>? route = null)
+    public IRoutingConfigurationBuilder ReplaceNode<TComponent>(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Action<INodeBuilder>? builder = null)
         where TComponent : ComponentBase;
 
     /// <summary>
     /// Replaces the route with the given <paramref name="targetNodeKey"/> with the newly configured route.
     /// </summary>
     /// <param name="targetNodeKey">Key of the route that is being replaced.</param>
-    /// <param name="routeUri">URI of the route.</param>
+    /// <param name="uri">URI of the route.</param>
     /// <param name="componentType">Type of component representing the route.</param>
-    /// <param name="route">Builder action for further configuring the new route.</param>
+    /// <param name="builder">Builder action for further configuring the new route.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Type componentType, Action<INodeBuilder>? route = null);
+    public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<INodeBuilder>? builder = null);
 
     /// <summary>
     /// Replaces the representing component of a route with the given <paramref name="key"/> with the specified <typeparamref name="TComponent"/>.
@@ -138,12 +138,12 @@ public interface IRoutingConfigurationBuilder
     public IRoutingConfigurationBuilder ReplaceNodeComponent(string key, Type componentType);
 
     /// <summary>
-    /// Moves the node with the given <paramref name="nodeKey"/> to the group node with the given <paramref name="targetGroupKey"/>.
+    /// Moves the node with the given <paramref name="nodeKey"/> to the node with the given <paramref name="targetNodeKey"/>.
     /// </summary>
     /// <param name="nodeKey">Key of the node that is to be moved.</param>
-    /// <param name="targetGroupKey">Key of the target parent group node.</param>
+    /// <param name="targetNodeKey">Key of the target parent node.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder MoveNodeToNode(string nodeKey, string targetGroupKey);
+    public IRoutingConfigurationBuilder MoveNodeToNode(string nodeKey, string targetNodeKey);
 
     /// <summary>
     /// Removes the node with the given <paramref name="key"/> from the configuration, if it has been found..
@@ -153,13 +153,13 @@ public interface IRoutingConfigurationBuilder
     public IRoutingConfigurationBuilder RemoveNode(string key);
 
     /// <summary>
-    /// Adds metadata to the node with the given  <paramref name="nodeKey"/>.
+    /// Adds metadata to the node with the given  <paramref name="targetNodeKey"/>.
     /// </summary>
-    /// <param name="nodeKey">Key of the node, the metadata is to be atted to.</param>
+    /// <param name="targetNodeKey">Key of the node, the metadata is to be atted to.</param>
     /// <param name="key">Metadata key.</param>
     /// <param name="value">Metadata value.</param>
     /// <returns>The <see cref="IRoutingConfigurationBuilder"/> for further configurations.</returns>
-    public IRoutingConfigurationBuilder AddMetadataToNode(string nodeKey, string key, object value);
+    public IRoutingConfigurationBuilder AddMetadataToNode(string targetNodeKey, string key, object value);
 
     /// <summary>
     /// Sets the <paramref name="uri"/> that is to be redirected to, if no route for the current URI was found.

@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Routing;
-using Trailblazor.Routing.Extensions;
-using Trailblazor.Routing.Configuration;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Routing;
+using Trailblazor.Routing.Configuration;
+using Trailblazor.Routing.Extensions;
 
 namespace Trailblazor.Routing;
 
 /// <summary>
-/// Trailblazor router reacts to navigations and initiates the render of the registered <see cref="IRouteNode"/> that is associated with the current relative URI.
+/// Trailblazor router reacts to navigations and initiates the render of the registered <see cref="INode"/> that is associated with the current relative URI.
 /// </summary>
 /// <remarks>
 /// <para>

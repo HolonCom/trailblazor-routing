@@ -8,7 +8,7 @@ namespace Trailblazor.Routing.Configuration;
 public interface INode
 {
     /// <summary>
-    /// Internal nodes. This list is required for the framework to be able to add nodes to the group.
+    /// Internal nodes. This list is required for the framework to be able to add nodes to the node.
     /// </summary>
     internal List<INode> InternalNodes { get; }
 
@@ -33,12 +33,12 @@ public interface INode
     public Type? ComponentType { get; internal set; }
 
     /// <summary>
-    /// Parent group of the group.
+    /// Parent node of the node.
     /// </summary>
     public INode? ParentNode { get; internal set; }
 
     /// <summary>
-    /// Total child nodes of the group.
+    /// Child nodes of the node.
     /// </summary>
     public IReadOnlyList<INode> Nodes { get; }
 

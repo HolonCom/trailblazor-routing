@@ -80,8 +80,8 @@ internal class Node : INode
 
         nodes.AddRange(Nodes.Where(r => r.ComponentType == componentType));
 
-        foreach (var groupNode in Nodes)
-            groupNode.AccumulateRoutesForType(componentType, nodes);
+        foreach (var node in Nodes)
+            node.AccumulateRoutesForType(componentType, nodes);
     }
 
     public TValue? GetMetadataValue<TValue>(string key, TValue? defaultValue = default)

@@ -21,8 +21,8 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     /// <inheritdoc/>
     public IRoutingConfigurationBuilder AddNode(string key, Action<INodeBuilder>? builder = null)
     {
-        var groupNode = Node.CreateUsingBuilder(key, [], builder: builder);
-        return AddNode(groupNode);
+        var node = Node.CreateUsingBuilder(key, [], builder: builder);
+        return AddNode(node);
     }
 
     /// <inheritdoc/>
@@ -39,37 +39,37 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder AddNodeToNode(string targetGroupNodeKey, INode node)
+    public IRoutingConfigurationBuilder AddNodeToNode(string targetNodeKey, INode node)
     {
-        var parentGroupNode = FindNode(targetGroupNodeKey) ?? throw new RoutingValidationException($"Group node with key '{targetGroupNodeKey}' not found.");
-        parentGroupNode.InternalNodes.Add(node);
+        var parentNode = FindNode(targetNodeKey) ?? throw new RoutingValidationException($"Node node with key '{targetNodeKey}' not found.");
+        parentNode.InternalNodes.Add(node);
 
         return this;
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder AddNodeToNode(string targetGroupKey, string groupKey, Action<INodeBuilder>? builder = null)
+    public IRoutingConfigurationBuilder AddNodeToNode(string targetNodeKey, string key, Action<INodeBuilder>? builder = null)
     {
-        var parentGroupNode = FindNode(targetGroupKey) ?? throw new RoutingValidationException($"Group node with key '{targetGroupKey}' not found.");
-        var childGroupNode = Node.CreateUsingBuilder(groupKey, [], parentGroupNode, builder: builder);
+        var parentNode = FindNode(targetNodeKey) ?? throw new RoutingValidationException($"Node node with key '{targetNodeKey}' not found.");
+        var node = Node.CreateUsingBuilder(key, [], parentNode, builder: builder);
 
-        parentGroupNode.InternalNodes.Add(childGroupNode);
+        parentNode.InternalNodes.Add(node);
         return this;
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder AddNodeToNode<TComponent>(string targetGroupKey, string routeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Action<INodeBuilder>? builder = null) where TComponent : ComponentBase
+    public IRoutingConfigurationBuilder AddNodeToNode<TComponent>(string targetNodeKey, string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Action<INodeBuilder>? builder = null) where TComponent : ComponentBase
     {
-        return AddNodeToNode(targetGroupKey, routeKey, routeUri, typeof(TComponent), builder);
+        return AddNodeToNode(targetNodeKey, key, uri, typeof(TComponent), builder);
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder AddNodeToNode(string targetGroupKey, string routeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Type componentType, Action<INodeBuilder>? builder = null)
+    public IRoutingConfigurationBuilder AddNodeToNode(string targetNodeKey, string key, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<INodeBuilder>? builder = null)
     {
-        var parentGroupNode = FindNode(targetGroupKey) ?? throw new RoutingValidationException($"Group node with key '{targetGroupKey}' not found.");
-        var routeNode = Node.CreateUsingBuilder(routeKey, [routeUri], componentType: componentType, builder: builder);
+        var parentNode = FindNode(targetNodeKey) ?? throw new RoutingValidationException($"Node node with key '{targetNodeKey}' not found.");
+        var node = Node.CreateUsingBuilder(key, [uri], componentType: componentType, builder: builder);
 
-        parentGroupNode.InternalNodes.Add(routeNode);
+        parentNode.InternalNodes.Add(node);
         return this;
     }
 
@@ -85,26 +85,26 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     /// <inheritdoc/>
     public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, Action<INodeBuilder> builder)
     {
-        var parentGroupNode = FindParentForNode(targetNodeKey);
+        var targetNode = FindParentForNode(targetNodeKey);
         RemoveNode(targetNodeKey);
 
-        var newGroupNode = Node.CreateUsingBuilder(targetNodeKey, [], parentGroupNode, builder: builder);
-        AddNode(newGroupNode);
+        var newNode = Node.CreateUsingBuilder(targetNodeKey, [], targetNode, builder: builder);
+        AddNode(newNode);
 
         return this;
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder ReplaceNode<TComponent>(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Action<INodeBuilder>? builder = null) where TComponent : ComponentBase
+    public IRoutingConfigurationBuilder ReplaceNode<TComponent>(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Action<INodeBuilder>? builder = null) where TComponent : ComponentBase
     {
-        return ReplaceNode(targetNodeKey, routeUri, typeof(TComponent), builder);
+        return ReplaceNode(targetNodeKey, uri, typeof(TComponent), builder);
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string routeUri, Type componentType, Action<INodeBuilder>? builder = null)
+    public IRoutingConfigurationBuilder ReplaceNode(string targetNodeKey, [StringSyntax(StringSyntaxAttribute.Uri)] string uri, Type componentType, Action<INodeBuilder>? builder = null)
     {
         RemoveNode(targetNodeKey);
-        var newRouteNode = Node.CreateUsingBuilder(targetNodeKey, [routeUri], componentType: componentType, builder: builder);
+        var newRouteNode = Node.CreateUsingBuilder(targetNodeKey, [uri], componentType: componentType, builder: builder);
 
         AddNode(newRouteNode);
         return this;
@@ -127,13 +127,13 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder MoveNodeToNode(string nodeKey, string targetGroupKey)
+    public IRoutingConfigurationBuilder MoveNodeToNode(string key, string targetNodeKey)
     {
-        var node = FindNode(nodeKey) ?? throw new RoutingValidationException($"Node with key '{nodeKey}' not found.");
-        var targetGroupNode = FindNode(targetGroupKey) ?? throw new RoutingValidationException($"Group node with key '{targetGroupKey}' not found.");
+        var node = FindNode(key) ?? throw new RoutingValidationException($"Node with key '{key}' not found.");
+        var targetNode = FindNode(targetNodeKey) ?? throw new RoutingValidationException($"Node node with key '{targetNodeKey}' not found.");
 
-        RemoveNode(nodeKey);
-        targetGroupNode.InternalNodes.Add(node);
+        RemoveNode(key);
+        targetNode.InternalNodes.Add(node);
 
         return this;
     }
@@ -142,10 +142,10 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     public IRoutingConfigurationBuilder RemoveNode(string key)
     {
         var node = FindNode(key) ?? throw new RoutingValidationException($"Node with key '{key}' not found.");
-        var parentGroupNode = FindParentForNode(key);
+        var parentNode = FindParentForNode(key);
 
-        if (parentGroupNode != null)
-            parentGroupNode.InternalNodes.Remove(node);
+        if (parentNode != null)
+            parentNode.InternalNodes.Remove(node);
         else
             _nodes.Remove(node);
 
@@ -153,9 +153,9 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     }
 
     /// <inheritdoc/>
-    public IRoutingConfigurationBuilder AddMetadataToNode(string nodeKey, string key, object value)
+    public IRoutingConfigurationBuilder AddMetadataToNode(string targetNodeKey, string key, object value)
     {
-        var node = FindNode(nodeKey) ?? throw new RoutingValidationException($"Node with key '{nodeKey}' not found.");
+        var node = FindNode(targetNodeKey) ?? throw new RoutingValidationException($"Node with key '{targetNodeKey}' not found.");
         node.SetMetadataValue(key, value);
 
         return this;
@@ -209,19 +209,16 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
 
     private INode? FindNode(string key)
     {
-        INode? FindNodeInGroup(INode groupNode)
+        INode? FindNodeInNode(INode node)
         {
-            foreach (var child in groupNode.Nodes)
+            foreach (var child in node.Nodes)
             {
                 if (child.Key == key)
                     return child;
 
-                if (child is INode childGroup)
-                {
-                    var found = FindNodeInGroup(childGroup);
-                    if (found != null)
-                        return found;
-                }
+                var found = FindNodeInNode(node);
+                if (found != null)
+                    return found;
             }
 
             return null;
@@ -232,12 +229,9 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
             if (node.Key == key)
                 return node;
 
-            if (node is INode groupNode)
-            {
-                var found = FindNodeInGroup(groupNode);
-                if (found != null)
-                    return found;
-            }
+            var found = FindNodeInNode(node);
+            if (found != null)
+                return found;
         }
 
         return null;
@@ -245,14 +239,14 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
 
     private INode? FindParentForNode(string key)
     {
-        INode? FindParentGroupNodeInGroup(INode groupNode)
+        INode? FindParentNodeInNode(INode node)
         {
-            if (groupNode.Nodes.Any(node => node.Key == key))
-                return groupNode;
+            if (node.Nodes.Any(n => n.Key == key))
+                return node;
 
-            return groupNode.Nodes.OfType<INode>().SingleOrDefault(childGroup => FindParentGroupNodeInGroup(childGroup) != null);
+            return node.Nodes.OfType<INode>().SingleOrDefault(n => FindParentNodeInNode(n) != null);
         }
 
-        return _nodes.OfType<INode>().SingleOrDefault(groupNode => FindParentGroupNodeInGroup(groupNode) != null);
+        return _nodes.OfType<INode>().SingleOrDefault(n => FindParentNodeInNode(n) != null);
     }
 }
