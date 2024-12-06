@@ -39,6 +39,13 @@ public interface IRoutingOptionsBuilder
     public IRoutingOptionsBuilder ConfigureConfiguration(Action<IRoutingConfigurationBuilder> configuration);
 
     /// <summary>
+    /// Scans for components in the given <paramref name="assemblies"/> and adds them as top-level <see cref="INode"/>s.
+    /// </summary>
+    /// <param name="assemblies">Assemblies to scan in.</param>
+    /// <returns></returns>
+    public IRoutingOptionsBuilder ScanForNodesInAssemblies(params List<Assembly> assemblies);
+
+    /// <summary>
     /// Completes the configuration process and builds the configured <see cref="IRoutingOptions"/>.
     /// </summary>
     /// <returns>The configured <see cref="IRoutingOptions"/>.</returns>

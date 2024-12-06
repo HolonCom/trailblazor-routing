@@ -37,6 +37,12 @@ internal sealed class RoutingOptionsBuilder : IRoutingOptionsBuilder
         return this;
     }
 
+    public IRoutingOptionsBuilder ScanForNodesInAssemblies(params List<Assembly> assemblies)
+    {
+        _routingOptions.InternalNodeScanAssemblies = _routingOptions.NodeScanAssemblies.Concat(assemblies).Distinct().ToList();
+        return this;
+    }
+
     public IRoutingOptions Build()
     {
         return _routingOptions;

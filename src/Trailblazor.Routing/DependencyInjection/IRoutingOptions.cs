@@ -1,4 +1,5 @@
-﻿using Trailblazor.Routing.Configuration;
+﻿using System.Reflection;
+using Trailblazor.Routing.Configuration;
 
 namespace Trailblazor.Routing.DependencyInjection;
 
@@ -17,4 +18,9 @@ public interface IRoutingOptions
     /// Registered types implementing the <see cref="IRoutingProfile"/> interface. These types will be resolved once to configure the <see cref="IRoutingConfiguration"/>.
     /// </summary>
     public IReadOnlyList<Type> RoutingProfileTypes { get; }
+
+    /// <summary>
+    /// Assemblies that are to be scanned for nodes.
+    /// </summary>
+    public IReadOnlyList<Assembly> NodeScanAssemblies { get; }
 }
