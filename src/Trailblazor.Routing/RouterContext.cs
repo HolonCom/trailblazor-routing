@@ -1,72 +1,27 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Trailblazor.Routing.Routes;
+using Trailblazor.Routing.Configuration;
 
 namespace Trailblazor.Routing;
 
 /// <summary>
-/// Object represents the current context of the router.
+/// Context of the <see cref="TrailblazorRouter"/>. Contains details about the current route, query parameters and more.
 /// </summary>
 public sealed record RouterContext
 {
-    private RouterContext() { }
+    internal RouterContext() { }
 
     /// <summary>
-    /// Current relative URI with query parameters.
+    /// Current route.
     /// </summary>
-    public required string? RelativeUriWithParameters { get; init; }
+    public required INode? RouteNode { get; init; }
 
     /// <summary>
-    /// Current relative URI with query parameters.
+    /// Current query parameters.
     /// </summary>
-    public required string? RelativeUri { get; init; }
+    public IReadOnlyDictionary<string, object> RouteParameters { get; init; } = new Dictionary<string, object>();
 
     /// <summary>
-    /// Query parameters of the current relative URI.
+    /// Current route data.
     /// </summary>
-    public required Dictionary<string, string> UriQueryParameters { get; init; }
-
-    /// <summary>
-    /// Query parameters originating from the query parameters from the current relative URI, that were able to be associated with
-    /// the components parameters with a <see cref="SupplyParameterFromQueryAttribute"/> and matching query parameter name.
-    /// </summary>
-    /// <remarks>
-    /// The key represents the properties name, while the value represents the parsed query parameter value.
-    /// </remarks>
-    public required Dictionary<string, object?> ComponentQueryParameters { get; init; }
-
-    /// <summary>
-    /// Route associated with the current relative URI.
-    /// </summary>
-    public required Route? Route { get; init; }
-
-    /// <summary>
-    /// Route data for the URI.
-    /// </summary>
-    public required RouteData? RouteData { get; init; }
-
-    internal static RouterContext New(string relativeUriWithParameters, string relativeUri, Dictionary<string, string> uriQueryParameters, Dictionary<string, object?> componentQueryParameters, Route? route)
-    {
-        return new RouterContext()
-        {
-            RelativeUriWithParameters = relativeUriWithParameters,
-            RelativeUri = relativeUri,
-            UriQueryParameters = uriQueryParameters,
-            ComponentQueryParameters = componentQueryParameters,
-            Route = route,
-            RouteData = route != null ? new RouteData(route.Component, componentQueryParameters) : null,
-        };
-    }
-
-    internal static RouterContext Empty()
-    {
-        return new RouterContext()
-        {
-            RelativeUriWithParameters = string.Empty,
-            RelativeUri = string.Empty,
-            UriQueryParameters = [],
-            ComponentQueryParameters = [],
-            Route = null,
-            RouteData = null,
-        };
-    }
+    public required RouteData RouteData { get; init; }
 }

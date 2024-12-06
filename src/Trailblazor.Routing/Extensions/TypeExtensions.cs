@@ -2,11 +2,6 @@
 
 internal static class TypeExtensions
 {
-    internal static bool IsString(this Type type)
-    {
-        return type == typeof(string);
-    }
-
     internal static bool IsGuid(this Type type)
     {
         return type == typeof(Guid) || type == typeof(Guid?);
@@ -25,11 +20,6 @@ internal static class TypeExtensions
     internal static bool IsDateOnly(this Type type)
     {
         return type == typeof(DateOnly) || type == typeof(DateOnly?);
-    }
-
-    internal static bool IsBool(this Type type)
-    {
-        return type == typeof(bool);
     }
 
     internal static bool IsInt(this Type type)
