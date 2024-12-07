@@ -26,9 +26,9 @@
 
     private string[] GetMetadata()
     {
-        if (Context.RouteNode == null)
+        if (Context.Node == null)
             return [];
 
-        return Context.RouteNode.Metadata.Select(m => $"{m.Key}; {m.Value}").ToArray();
+        return Context.Node.Metadata.Select(m => $"{m.Key}; {m.Value}").ToArray();
     }
 }

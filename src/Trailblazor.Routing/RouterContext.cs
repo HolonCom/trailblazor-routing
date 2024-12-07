@@ -13,12 +13,12 @@ public sealed record RouterContext
     /// <summary>
     /// Current route.
     /// </summary>
-    public required INode? RouteNode { get; init; }
+    public required INode? Node { get; init; }
 
     /// <summary>
     /// Current query parameters.
     /// </summary>
-    public IReadOnlyDictionary<string, object> RouteParameters { get; init; } = new Dictionary<string, object>();
+    public IReadOnlyDictionary<string, object> ComponentParameters { get; init; } = new Dictionary<string, object>();
 
     /// <summary>
     /// Current route data.

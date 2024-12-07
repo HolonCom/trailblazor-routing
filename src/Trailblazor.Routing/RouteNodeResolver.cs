@@ -8,9 +8,9 @@ namespace Trailblazor.Routing;
 internal sealed class RouteNodeResolver(
     IRoutingConfigurationProvider _routingConfigurationProvider,
     IComponentParameterParser _componentParameterParser,
-    IUriParser _uriParser) : IRouteNodeResolver
+    IUriParser _uriParser) : INodeResolver
 {
-    public RouteResolveResult ResolveRouteForUri(string currentUri)
+    public NodeResolveResult ResolveNodeForUri(string currentUri)
     {
         currentUri = currentUri.Trim('/');
         var currentUriWithoutQueryParameters = _uriParser.GetUriWithoutQueryParameters(currentUri);
@@ -37,16 +37,16 @@ internal sealed class RouteNodeResolver(
                 throw new RoutingValidationException($"The node with the key '{routeNode.Key}' matches the current relative URI but has no associated component type.");
 
             var currentUriQueryParameters = _uriParser.GetQueryParametersFromUri(currentUri);
-            return new RouteResolveResult()
+            return new NodeResolveResult()
             {
-                RouteNode = routeNode,
+                Node = routeNode,
                 ComponentParameters = _componentParameterParser.GetComponentParametersFromQueryParameters(
                     routeNode.ComponentType,
                     currentUriParameters.Concat(currentUriQueryParameters).ToDictionary()),
             };
         }
 
-        return RouteResolveResult.Empty;
+        return NodeResolveResult.Empty;
     }
 
     private Dictionary<string, string> GetUriParametersFromTheCurrentUriUsingTheRouteUriPattern(string currentUri, string routeUri)
