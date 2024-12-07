@@ -43,6 +43,12 @@ internal sealed class RoutingOptionsBuilder : IRoutingOptionsBuilder
         return this;
     }
 
+    public IRoutingOptionsBuilder DisableRoutingConfigurationValidation()
+    {
+        _routingOptions.RoutingConfigurationValidationDisabled = true;
+        return this;
+    }
+
     public IRoutingOptions Build()
     {
         return _routingOptions;

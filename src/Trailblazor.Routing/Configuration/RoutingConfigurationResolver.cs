@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 using Trailblazor.Routing.Configuration.Validation;
 using Trailblazor.Routing.DependencyInjection;
 
@@ -23,15 +22,21 @@ internal sealed class RoutingConfigurationResolver(
 
             _routingOptionsProvider.GetRoutingOptions().ProfileAction?.Invoke(routingConfigurationBuilder);
 
-            var routingConfiguration = routingConfigurationBuilder.Build();
-            _routingConfigurationValidator.ValidateAndThrowIfInvalid(routingConfiguration);
-
-            return routingConfiguration;
+            return GetValidatedRoutingConfiguration(routingConfigurationBuilder.Build());
         }
         catch (Exception ex)
         {
             _serviceProvider.GetService<ILogger<RoutingConfigurationResolver>>()?.LogError(ex, ex.ToString());
             throw;
         }
+    }
+
+    private IRoutingConfiguration GetValidatedRoutingConfiguration(IRoutingConfiguration routingConfiguration)
+    {
+        var validateRoutingConfiguration = !_routingOptionsProvider.GetRoutingOptions().RoutingConfigurationValidationDisabled;
+        if (validateRoutingConfiguration)
+            _routingConfigurationValidator.ValidateAndThrowIfInvalid(routingConfiguration);
+
+        return routingConfiguration;
     }
 }

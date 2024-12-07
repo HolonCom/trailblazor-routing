@@ -42,7 +42,9 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     public IRoutingConfigurationBuilder AddNodeToNode(string targetNodeKey, INode node)
     {
         var parentNode = FindNode(targetNodeKey) ?? throw new RoutingValidationException($"Node node with key '{targetNodeKey}' not found.");
+
         parentNode.InternalNodes.Add(node);
+        node.ParentNode = parentNode;
 
         return this;
     }

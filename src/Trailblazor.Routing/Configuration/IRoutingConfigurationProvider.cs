@@ -1,4 +1,6 @@
-﻿namespace Trailblazor.Routing.Configuration;
+﻿using Trailblazor.Routing.Exceptions;
+
+namespace Trailblazor.Routing.Configuration;
 
 /// <summary>
 /// Service provides the configured <see cref="IRoutingConfiguration"/>.
@@ -9,5 +11,6 @@ public interface IRoutingConfigurationProvider
     /// Method gets the configured <see cref="IRoutingConfiguration"/>.
     /// </summary>
     /// <returns>The configured <see cref="IRoutingConfiguration"/>.</returns>
+    /// <exception cref="RoutingValidationException">Thrown if any validation related exceptions occurr.</exception>
     public IRoutingConfiguration GetRoutingConfiguration();
 }

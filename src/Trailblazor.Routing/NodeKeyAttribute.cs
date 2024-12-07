@@ -4,7 +4,7 @@
 /// Attribute configures a component types key.
 /// </summary>
 /// <remarks>
-/// Sets the <see cref="NodeKey"/> using the given <paramref name="nodeKey"/>.
+/// This attribute is not mandatory. If not specified, the name of the component type is being used as the node key.
 /// </remarks>
 /// <param name="nodeKey">Key of the node.</param>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
