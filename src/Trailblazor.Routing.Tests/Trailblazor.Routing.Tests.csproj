@@ -18,4 +18,8 @@
     <Using Include="Xunit" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Trailblazor.Routing\Trailblazor.Routing.csproj" />
+  </ItemGroup>
+
 </Project>
