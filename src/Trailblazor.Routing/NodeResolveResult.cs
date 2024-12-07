@@ -3,14 +3,14 @@
 namespace Trailblazor.Routing;
 
 /// <summary>
-/// Result of a route node resolve operation.
+/// Result of a node resolve operation.
 /// </summary>
-public sealed class RouteResolveResult
+public sealed class NodeResolveResult
 {
     /// <summary>
-    /// Resolved route node.
+    /// Resolved node.
     /// </summary>
-    public INode? RouteNode { get; init; }
+    public INode? Node { get; init; }
 
     /// <summary>
     /// Parsed parameters of the route node componenet.
@@ -20,5 +20,5 @@ public sealed class RouteResolveResult
     /// <summary>
     /// Creates an empty result.
     /// </summary>
-    public static RouteResolveResult Empty => new();
+    public static NodeResolveResult Empty => new();
 }

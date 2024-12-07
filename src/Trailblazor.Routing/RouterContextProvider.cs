@@ -9,26 +9,38 @@ namespace Trailblazor.Routing;
 internal sealed class RouterContextProvider(
     NavigationManager _navigationManager,
     IRoutingConfigurationProvider _routingConfigurationProvider,
-    IRouteNodeResolver _routeNodeResolver) : IRouterContextProvider
+    INodeResolver _routeNodeResolver) : IRouterContextProvider
 {
     private RouterContext? _routerContext;
+    private event EventHandler<RouterContextUpdatedEventArgs>? OnRouterContextChangedEvent;
 
     public RouterContext GetRouterContext()
     {
         return _routerContext ??= CreateRouterContextFromUri();
     }
 
+    public void Subscribe(EventHandler<RouterContextUpdatedEventArgs> eventHandler)
+    {
+        OnRouterContextChangedEvent += eventHandler;
+    }
+
+    public void Unsubscribe(EventHandler<RouterContextUpdatedEventArgs> eventHandler)
+    {
+        OnRouterContextChangedEvent -= eventHandler;
+    }
+
     public void UpdateRouterContext()
     {
         _routerContext = CreateRouterContextFromUri();
+        OnRouterContextChangedEvent?.Invoke(this, new() { Context = _routerContext, });
     }
 
     private RouterContext CreateRouterContextFromUri()
     {
-        var routeResult = _routeNodeResolver.ResolveRouteForUri(_navigationManager.GetRelativeUri());
+        var routeResult = _routeNodeResolver.ResolveNodeForUri(_navigationManager.GetRelativeUri());
         RouteData routeData;
 
-        if (routeResult.RouteNode == null)
+        if (routeResult.Node == null)
         {
             var notFoundRedirectUri = _routingConfigurationProvider.GetRoutingConfiguration().NotFoundRedirectUri;
             if (notFoundRedirectUri != null)
@@ -39,16 +51,16 @@ internal sealed class RouterContextProvider(
         }
         else
         {
-            if (routeResult.RouteNode.ComponentType == null)
-                throw new RoutingValidationException($"Route with the key '{routeResult.RouteNode.Key}' was resolved but does not have a configured component type and thus cannot be rendered.");
+            if (routeResult.Node.ComponentType == null)
+                throw new RoutingValidationException($"Route with the key '{routeResult.Node.Key}' was resolved but does not have a configured component type and thus cannot be rendered.");
 
-            routeData = new RouteData(routeResult.RouteNode.ComponentType, routeResult.ComponentParameters!);
+            routeData = new RouteData(routeResult.Node.ComponentType, routeResult.ComponentParameters!);
         }
 
         return new RouterContext()
         {
-            RouteNode = routeResult.RouteNode,
-            RouteParameters = routeResult.ComponentParameters,
+            Node = routeResult.Node,
+            ComponentParameters = routeResult.ComponentParameters,
             RouteData = routeData,
         };
     }

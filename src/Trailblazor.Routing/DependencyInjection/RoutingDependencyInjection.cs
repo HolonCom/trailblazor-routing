@@ -24,7 +24,7 @@ public static class RoutingDependencyInjection
 
         services.AddSingleton<IRoutingOptionsProvider>(sp => new RoutingOptionsProvider(routingOptions));
         services.AddSingleton<IRoutingConfigurationValidator, RoutingConfigurationValidator>();
-        services.AddScoped<IRouteNodeResolver, RouteNodeResolver>();
+        services.AddScoped<INodeResolver, RouteNodeResolver>();
         services.AddScoped<IRoutingConfigurationResolver, RoutingConfigurationResolver>();
         services.AddScoped<IRoutingConfigurationProvider, RoutingConfigurationProvider>();
         services.AddScoped<INodeProvider, NodeProvider>();

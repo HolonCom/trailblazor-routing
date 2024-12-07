@@ -12,6 +12,18 @@ public interface IRouterContextProvider
     public RouterContext GetRouterContext();
 
     /// <summary>
+    /// Subscribes to the event that is being invoked when the router context gets updated.
+    /// </summary>
+    /// <param name="eventHandler">Hander of the event.</param>
+    public void Subscribe(EventHandler<RouterContextUpdatedEventArgs> eventHandler);
+
+    /// <summary>
+    /// Unsubscribes from the event that is being invoked when the router context gets updated.
+    /// </summary>
+    /// <param name="eventHandler">Hander of the event.</param>
+    public void Unsubscribe(EventHandler<RouterContextUpdatedEventArgs> eventHandler);
+
+    /// <summary>
     /// Method internally prompts the provider to update itself and create a new context.
     /// </summary>
     internal void UpdateRouterContext();
