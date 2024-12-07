@@ -28,7 +28,6 @@ internal class Node : INode
         return Uris.Any(u => u == uri);
     }
 
-
     public INode? FindChildOrItselfByKey(string key)
     {
         if (Key == key)

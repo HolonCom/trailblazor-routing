@@ -65,7 +65,7 @@ internal sealed class RouteNodeResolver(
             parameters[groupName] = match.Groups[groupName].Value;
         }
 
-        return parameters;
+        return parameters.Where(p => !string.IsNullOrWhiteSpace(p.Key) && !string.IsNullOrWhiteSpace(p.Value)).ToDictionary();
     }
 
     private Regex CreateUriParameterRegexFromUri(string uri)
