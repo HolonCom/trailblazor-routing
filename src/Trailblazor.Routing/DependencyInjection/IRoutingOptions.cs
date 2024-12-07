@@ -23,4 +23,9 @@ public interface IRoutingOptions
     /// Assemblies that are to be scanned for nodes.
     /// </summary>
     public IReadOnlyList<Assembly> NodeScanAssemblies { get; }
+
+    /// <summary>
+    /// Determines whether the fully configured <see cref="IRoutingConfiguration"/> is to be validated or not.
+    /// </summary>
+    public bool RoutingConfigurationValidationDisabled { get; }
 }

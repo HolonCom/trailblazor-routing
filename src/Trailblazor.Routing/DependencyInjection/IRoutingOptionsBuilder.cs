@@ -42,8 +42,17 @@ public interface IRoutingOptionsBuilder
     /// Scans for components in the given <paramref name="assemblies"/> and adds them as top-level <see cref="INode"/>s.
     /// </summary>
     /// <param name="assemblies">Assemblies to scan in.</param>
-    /// <returns></returns>
+    /// <returns>The <see cref="IRoutingOptionsBuilder"/> for further configurations.</returns>
     public IRoutingOptionsBuilder ScanForNodesInAssemblies(params List<Assembly> assemblies);
+
+    /// <summary>
+    /// Disables validating the <see cref="IRoutingConfiguration"/> after it has been fully configured.
+    /// </summary>
+    /// <remarks>
+    /// This doesnt prevent exceptions from occurring at all, this might just shift the occurrence of exceptions to somewhere else.
+    /// </remarks>
+    /// <returns>The <see cref="IRoutingOptionsBuilder"/> for further configurations.</returns>
+    public IRoutingOptionsBuilder DisableRoutingConfigurationValidation();
 
     /// <summary>
     /// Completes the configuration process and builds the configured <see cref="IRoutingOptions"/>.

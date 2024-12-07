@@ -11,4 +11,5 @@ internal sealed class RoutingOptions : IRoutingOptions
     public Action<IRoutingConfigurationBuilder>? ProfileAction { get; internal set; }
     public IReadOnlyList<Type> RoutingProfileTypes => InternalRoutingProfileTypes;
     public IReadOnlyList<Assembly> NodeScanAssemblies => InternalNodeScanAssemblies;
+    public bool RoutingConfigurationValidationDisabled { get; internal set; }
 }
