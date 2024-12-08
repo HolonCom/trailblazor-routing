@@ -41,7 +41,6 @@ internal sealed class UriParser : IUriParser
         if (!uri.Contains('?'))
             return queryParameters;
 
-        //var queryString = uri.Substring(uri.IndexOf('?') + 1);
         var queryString = uri.Split('?')[1];
         var queryParameterPairs = queryString.Split('&', StringSplitOptions.RemoveEmptyEntries);
 
@@ -53,11 +52,6 @@ internal sealed class UriParser : IUriParser
                 var decodedKey = Uri.UnescapeDataString(pair[0]);
                 var decodedValue = Uri.UnescapeDataString(pair[1]);
                 queryParameters[decodedKey] = decodedValue;
-            }
-            else if (pair.Length == 1)
-            {
-                var decodedKey = Uri.UnescapeDataString(pair[0]);
-                queryParameters[decodedKey] = string.Empty;
             }
         }
 

@@ -25,9 +25,9 @@ internal class Node : INode
 
     public bool HasUri([StringSyntax(StringSyntaxAttribute.Uri)] string uri)
     {
+        uri = uri.Trim('/').Trim('\\');
         return Uris.Any(u => u == uri);
     }
-
 
     public INode? FindChildOrItselfByKey(string key)
     {
@@ -50,14 +50,14 @@ internal class Node : INode
         return null;
     }
 
-    public INode? FindChildOrOwnByUri(string uri)
+    public INode? FindChildOrItselfByUri(string uri)
     {
         if (HasUri(uri))
             return this;
 
         foreach (var node in Nodes)
         {
-            var targetNode = node.FindChildOrOwnByUri(uri);
+            var targetNode = node.FindChildOrItselfByUri(uri);
             if (targetNode != null)
                 return targetNode;
         }
@@ -65,7 +65,7 @@ internal class Node : INode
         return null;
     }
 
-    public List<INode> FindChildrenAndOrOwnByComponentType(Type componentType)
+    public List<INode> FindChildrenAndOrItselfByComponentType(Type componentType)
     {
         var foundRoutes = new List<INode>();
         AccumulateRoutesForType(componentType, foundRoutes);
@@ -77,8 +77,6 @@ internal class Node : INode
     {
         if (ComponentType == componentType)
             nodes.Add(this);
-
-        nodes.AddRange(Nodes.Where(r => r.ComponentType == componentType));
 
         foreach (var node in Nodes)
             node.AccumulateRoutesForType(componentType, nodes);

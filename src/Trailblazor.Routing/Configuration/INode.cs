@@ -66,7 +66,7 @@ public interface INode
     /// </summary>
     /// <param name="uri">URI of the target route.</param>
     /// <returns>The target route if found.</returns>
-    public INode? FindChildOrOwnByUri(string uri);
+    public INode? FindChildOrItselfByUri([StringSyntax(StringSyntaxAttribute.Uri)] string uri);
 
     /// <summary>
     /// Accumulates all child route nodes, and/or the owned route node, where the representing component
@@ -74,7 +74,7 @@ public interface INode
     /// </summary>
     /// <param name="componentType">Type of component representing the target routes.</param>
     /// <returns>The target routes.</returns>
-    public List<INode> FindChildrenAndOrOwnByComponentType(Type componentType);
+    public List<INode> FindChildrenAndOrItselfByComponentType(Type componentType);
 
     /// <summary>
     /// Method fetches the nodes metadata value for the specified <paramref name="key"/> and casts it into the <typeparamref name="TValue"/>.

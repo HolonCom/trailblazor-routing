@@ -7,12 +7,12 @@ namespace Trailblazor.Routing.Parsing;
 
 internal sealed class ComponentParameterParser : IComponentParameterParser
 {
-    Dictionary<string, object> IComponentParameterParser.GetComponentParametersFromQueryParameters(Type componentType, Dictionary<string, string> unparserComponentParameters)
+    Dictionary<string, object> IComponentParameterParser.GetComponentParametersFromQueryParameters(Type componentType, Dictionary<string, string> unparsedComponentParameters)
     {
         var properties = componentType.GetProperties();
         var parsedParameters = new Dictionary<string, object>();
 
-        foreach (var unparsedParameter in unparserComponentParameters)
+        foreach (var unparsedParameter in unparsedComponentParameters)
         {
             QueryParameterAttribute? queryParameterAttribute = null;
             var targetProperty = properties.SingleOrDefault(p =>

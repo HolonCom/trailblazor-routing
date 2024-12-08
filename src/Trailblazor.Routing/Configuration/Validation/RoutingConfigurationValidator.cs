@@ -13,8 +13,6 @@ internal sealed class RoutingConfigurationValidator : IRoutingConfigurationValid
         ValidateAllNodesWithUrisHaveAComponentType(routingConfiguration);
         ValidateAllComponentTypesAreTypesOfComponents(routingConfiguration);
         ValidateAllRelationshipsAreCorrectlySetUp(routingConfiguration);
-        ValidateThereAreNoCircularReferences(routingConfiguration);
-        ValidateRedirectOnNotFoundUri(routingConfiguration);
         ValidateNotFoundComponentType(routingConfiguration);
     }
 
@@ -91,30 +89,6 @@ internal sealed class RoutingConfigurationValidator : IRoutingConfigurationValid
 
             ValidateNodeRelationships(child);
         }
-    }
-
-    private void ValidateThereAreNoCircularReferences(IRoutingConfiguration routingConfiguration)
-    {
-        foreach (var node in routingConfiguration.FlattenedNodes)
-            ValidateNoCircularReferences(node, []);
-    }
-
-    private void ValidateNoCircularReferences(INode node, HashSet<INode> visitedNodes)
-    {
-        if (visitedNodes.Contains(node))
-            throw new RoutingValidationException($"Circular reference detected at node with key '{node.Key}'.");
-
-        visitedNodes.Add(node);
-        foreach (var child in node.Nodes)
-            ValidateNoCircularReferences(child, visitedNodes);
-
-        visitedNodes.Remove(node);
-    }
-
-    private void ValidateRedirectOnNotFoundUri(IRoutingConfiguration routingConfiguration)
-    {
-        if (!string.IsNullOrEmpty(routingConfiguration.NotFoundRedirectUri) && !Uri.IsWellFormedUriString(routingConfiguration.NotFoundRedirectUri, UriKind.RelativeOrAbsolute))
-            throw new RoutingValidationException($"Invalid NotFoundRedirectUri: {routingConfiguration.NotFoundRedirectUri}");
     }
 
     private void ValidateNotFoundComponentType(IRoutingConfiguration routingConfiguration)
