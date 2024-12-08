@@ -7,13 +7,6 @@
     </PropertyGroup>
 
     <PropertyGroup>
-        <Version Condition=" '$(PackageVersion)' == '' ">1.0.0</Version>
-        <AssemblyVersion>$(Version)</AssemblyVersion>
-        <FileVersion>$(Version)</FileVersion>
-        <InformationalVersion>$(Version)</InformationalVersion>
-    </PropertyGroup>
-
-    <PropertyGroup>
         <EnablePackageValidation>true</EnablePackageValidation>
         <GenerateDocumentationFile>True</GenerateDocumentationFile>
         <PackageId>Trailblazor.Routing</PackageId>
