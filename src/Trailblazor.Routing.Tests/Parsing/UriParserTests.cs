@@ -270,28 +270,28 @@ public class UriParserTests
     public void GetUriWithQueryParameters_DateTimeParameter()
     {
         var uri = "https://example.com/path";
-        var dateTimeValue = new DateTime(2023, 11, 5, 13, 45, 30);
+        var dateTimeValue = new DateTime(2023, 11, 5, 13, 45, 30, DateTimeKind.Utc);
         var queryParameters = new Dictionary<string, object?>()
-        {
-            { "dateTime", dateTimeValue }
-        };
+    {
+        { "dateTime", dateTimeValue }
+    };
 
         var result = UriParser.GetUriWithQueryParameters(uri, queryParameters);
-        Assert.Contains("dateTime=2023-11-05T12%3A45%3A30Z", result);
+        Assert.Contains("dateTime=2023-11-05T13%3A45%3A30Z", result); // Corrected expected value
     }
 
     [Fact]
     public void GetUriWithQueryParameters_NullableDateTimeParameter()
     {
         var uri = "https://example.com/path";
-        DateTime? nullableDateTime = new DateTime(2023, 11, 5, 13, 45, 30);
+        DateTime? nullableDateTime = new DateTime(2023, 11, 5, 13, 45, 30, DateTimeKind.Utc);
         var queryParameters = new Dictionary<string, object?>()
-        {
-            { "nullableDateTime", nullableDateTime }
-        };
+    {
+        { "nullableDateTime", nullableDateTime }
+    };
 
         var result = UriParser.GetUriWithQueryParameters(uri, queryParameters);
-        Assert.Contains("nullableDateTime=2023-11-05T12%3A45%3A30Z", result);
+        Assert.Contains("nullableDateTime=2023-11-05T13%3A45%3A30Z", result); // Corrected expected value
     }
 
     [Fact]

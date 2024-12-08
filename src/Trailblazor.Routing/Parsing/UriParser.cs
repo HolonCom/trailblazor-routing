@@ -65,13 +65,25 @@ internal sealed class UriParser : IUriParser
 
         var stringValue = value switch
         {
-            DateTime dateTime => dateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"),
+            // Ensure DateTime is always in UTC
+            DateTime dateTime => dateTime.Kind switch
+            {
+                DateTimeKind.Local => dateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                DateTimeKind.Unspecified => DateTime.SpecifyKind(dateTime, DateTimeKind.Utc).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"),
+                _ => dateTime.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ"),
+            },
+
+            // Handle DateOnly, TimeOnly, and other formats consistently
             DateOnly dateOnly => dateOnly.ToString("yyyy-MM-dd"),
             TimeOnly timeOnly => timeOnly.ToString("HH:mm:ss"),
+
+            // Ensure culture-invariant numeric and decimal formatting
             int @int => @int.ToString(CultureInfo.InvariantCulture),
             long @long => @long.ToString(CultureInfo.InvariantCulture),
             decimal @decimal => @decimal.ToString(CultureInfo.InvariantCulture),
             double @double => @double.ToString(CultureInfo.InvariantCulture),
+
+            // Default to .ToString() for other objects
             _ => value.ToString(),
         };
 

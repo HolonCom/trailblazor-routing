@@ -60,8 +60,8 @@ internal sealed class ComponentParameterParser : IComponentParameterParser
                 return timeOnlyValue;
             else if (propertyType.IsDateOnly() && DateOnly.TryParse(parameterValueString, out var dateOnlyValue))
                 return dateOnlyValue;
-            else if (propertyType.IsDateTime() && DateTime.TryParse(parameterValueString, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal, out var dateTimeValue))
-                return dateTimeValue;
+            else if (propertyType.IsDateTime() && DateTime.TryParse(parameterValueString, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var dateTimeValue))
+                return dateTimeValue.Kind == DateTimeKind.Utc ? dateTimeValue : dateTimeValue.ToUniversalTime();
             else if (propertyType.IsInt() && int.TryParse(parameterValueString, CultureInfo.InvariantCulture, out var intValue))
                 return intValue;
             else if (propertyType.IsDouble() && double.TryParse(parameterValueString, CultureInfo.InvariantCulture, out var doubleValue))
