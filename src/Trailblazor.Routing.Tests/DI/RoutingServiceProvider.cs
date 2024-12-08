@@ -4,14 +4,14 @@ using Trailblazor.Routing.DependencyInjection;
 
 namespace Trailblazor.Routing.Tests.DI;
 
-public static class TestServiceProviderFactory
+internal static class TestServiceProviderFactory
 {
-    public static IServiceProvider Create(Action<IRoutingOptionsBuilder>? options = null)
+    internal static IServiceProvider Create(Action<IRoutingOptionsBuilder>? options = null)
     {
         return new ServiceCollection().AddTrailblazorRouting(options).BuildServiceProvider();
     }
 
-    public static IServiceProvider Create(Action<IRoutingConfigurationBuilder> builder)
+    internal static IServiceProvider Create(Action<IRoutingConfigurationBuilder> builder)
     {
         return new ServiceCollection().AddTrailblazorRouting(options => options.ConfigureConfiguration(builder)).BuildServiceProvider();
     }

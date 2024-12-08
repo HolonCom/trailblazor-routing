@@ -142,10 +142,8 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
         if (node.FindChildOrItselfByKey(targetNodeKey) != null)
             throw new RoutingValidationException($"Cannot move a parent node with the key '{key}' to a child with the key '{targetNodeKey}'.");
 
-        var targetNode = FindNode(targetNodeKey) ?? throw new RoutingValidationException($"Node node with key '{targetNodeKey}' not found.");
-
         RemoveNode(key);
-        targetNode.InternalNodes.Add(node);
+        AddNodeToNode(targetNodeKey, node);
 
         return this;
     }
@@ -228,7 +226,7 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
                 if (child.Key == key)
                     return child;
 
-                var found = FindNodeInNode(node);
+                var found = FindNodeInNode(child);
                 if (found != null)
                     return found;
             }
