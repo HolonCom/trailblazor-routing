@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
+using System.Xml.Linq;
 using Trailblazor.Routing.Exceptions;
 
 namespace Trailblazor.Routing.Configuration;
@@ -131,7 +132,16 @@ public sealed class RoutingConfigurationBuilder : IRoutingConfigurationBuilder
     /// <inheritdoc/>
     public IRoutingConfigurationBuilder MoveNodeToNode(string key, string targetNodeKey)
     {
+        // Cannot reference itself
+        if (key == targetNodeKey)
+            throw new RoutingValidationException($"Cannot move a node with a key '{key}' to itself.");
+
+        // Cannot move to a child, since that would cause all kinds of problems such as that the children would all
+        // move one up the hierarchy and as of now I dont really see a use case here.
         var node = FindNode(key) ?? throw new RoutingValidationException($"Node with key '{key}' not found.");
+        if (node.FindChildOrItselfByKey(targetNodeKey) != null)
+            throw new RoutingValidationException($"Cannot move a parent node with the key '{key}' to a child with the key '{targetNodeKey}'.");
+
         var targetNode = FindNode(targetNodeKey) ?? throw new RoutingValidationException($"Node node with key '{targetNodeKey}' not found.");
 
         RemoveNode(key);
