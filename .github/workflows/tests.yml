@@ -3,7 +3,7 @@ name: "Run unit tests"
 on:
   push:
     branches:
-    - "main"
+    - "net9/main"
 
 env:
   TEST_PROJECT: "src/Trailblazor.Routing.Tests/Trailblazor.Routing.Tests.csproj"
