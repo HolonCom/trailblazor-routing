@@ -137,8 +137,8 @@ public class RoutingConfigurationBuilderTests
 
         var routingConfiguration = _getConfigurationAction(serviceProvider);
 
-        Assert.Equal(0, routingConfiguration.FlattenedNodes.Single(p => p.Key == "Parent-A").Nodes.Count);
-        Assert.True(routingConfiguration.FlattenedNodes.Single(p => p.Key == "Parent-B").Nodes.Any(n => n.Key == "Child"));
+        Assert.Empty(routingConfiguration.FlattenedNodes.Single(p => p.Key == "Parent-A").Nodes);
+        Assert.Contains(routingConfiguration.FlattenedNodes.Single(p => p.Key == "Parent-B").Nodes, n => n.Key == "Child");
     }
 
     [Fact]
