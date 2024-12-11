@@ -186,8 +186,6 @@ Accessing the currently navigated to `INode` or parameters from the URI is very 
 
 Additionally the `IRouterContextAccessor` service provides the same instance of the current `RouterContext`. Inject the service to access routing data in your own services. You can also subscribe to it to catch when the `RouterContext` has been updated.
 
-### Subscribing 
-
 ## Accessing or resolving configured Nodes
 Either the `IRoutingConfigurationProvider` can be used to provide the `IRoutingConfiguration`, which contains all registered nodes as both a hierarchical list, for when you want to implement breadcrumbsn or a menu, and a flattened list of nodes that simply contains every node.
 
