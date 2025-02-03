@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Reflection;
+using Microsoft.AspNetCore.Components;
 using Trailblazor.Routing.Exceptions;
 
 namespace Trailblazor.Routing.Descriptors;

@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Reflection;
+using Microsoft.AspNetCore.Components;
 using Trailblazor.Routing.DependencyInjection;
 using Trailblazor.Routing.Extensions;
 

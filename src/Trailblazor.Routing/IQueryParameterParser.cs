@@ -1,6 +1,4 @@
-﻿using Trailblazor.Routing.Descriptors;
-
-namespace Trailblazor.Routing;
+﻿namespace Trailblazor.Routing;
 
 /// <summary>
 /// Service parses query parameter values from strings into their respective type.

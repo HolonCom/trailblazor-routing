@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Reflection;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 using Trailblazor.Routing.Constants;
 using Trailblazor.Routing.Exceptions;
 using Trailblazor.Routing.Profiles;

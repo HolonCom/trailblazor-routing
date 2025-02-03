@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using Trailblazor.Routing.Exceptions;
+﻿using Trailblazor.Routing.Exceptions;
 using Trailblazor.Routing.Routes;
 
 namespace Trailblazor.Routing.Profiles;
