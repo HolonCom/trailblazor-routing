@@ -34,16 +34,16 @@ jobs:
             --store-password-in-clear-text
 
       - name: Restore dependencies
-        run: dotnet restore src/Trailblazor.Routing.sln
+        run: dotnet restore src/Trailblazor.Routing.Core.sln
 
       - name: Build project
-        run: dotnet build src/Trailblazor.Routing.sln --configuration Release
+        run: dotnet build src/Trailblazor.Routing.Core.sln --configuration Release
 
 #      - name: Run tests
 #        run: dotnet test --no-restore --verbosity normal
 
       - name: Pack NuGet package
-        run: dotnet pack src/Trailblazor.Routing/Trailblazor.Routing.csproj --configuration Release --output out
+        run: dotnet pack src/Trailblazor.Routing.Core.sln --configuration Release --output out
 
       - name: Push NuGet package
         if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v1n' || startsWith(github.ref, 'refs/tags/v'))
