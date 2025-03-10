@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - v1n
+      - holoncom/v1n
+      - holoncom/v2n
     tags:
       - 'v*'
   pull_request:
@@ -46,7 +48,7 @@ jobs:
         run: dotnet pack src/Trailblazor.Routing.Core.sln --configuration Release --output out
 
       - name: Push NuGet package
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v1n' || startsWith(github.ref, 'refs/tags/v'))
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v1n' || github.ref == 'refs/heads/holoncom/v1n' || github.ref == 'refs/heads/holoncom/v2n' || startsWith(github.ref, 'refs/tags/v'))
         run: dotnet nuget push "out/*.nupkg" --source "HolonComGitea" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
 
       - name: Create Gitea Release
