@@ -7,7 +7,7 @@ on:
       # - v1n
       # - holoncom/v1n
       # - holoncom/v2n
-      - "*"
+      - "**"
     tags:
       - 'v*'
   pull_request:
