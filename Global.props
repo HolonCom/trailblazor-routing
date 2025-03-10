@@ -1,0 +1,57 @@
+<Project>
+
+  <!-- Project Metadata -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <Nullable>enable</Nullable>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageId>$(AssemblyName)</PackageId>
+	<Title>$(AssemblyName)</Title>
+	<Authors>HolonCom bv</Authors>
+    
+    <!-- MinVer Configuration -->
+    <MinVerMinimumMajorMinor>3.0</MinVerMinimumMajorMinor>
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+    <MinVerBuildMetadata Condition="'$(MinVerPreRelease)' != ''">build.{height}</MinVerBuildMetadata>
+  </PropertyGroup>
+
+  <!-- Assembly version settings -->
+  <PropertyGroup>
+    <AssemblyVersion>$(Version)</AssemblyVersion>
+    <FileVersion>$(Version)</FileVersion>
+    <AssemblyInformationalVersion>$(Version)</AssemblyInformationalVersion>
+
+    <!-- Valid options for ReferenceTypes: 'nuget' or 'source' -->
+    <HolonComCoreReferenceType>source</HolonComCoreReferenceType>
+    <HolonComDriversReferenceType>source</HolonComDriversReferenceType>
+  </PropertyGroup>
+
+  <!-- Build Configuration -->
+  <PropertyGroup>
+    <IncludeSymbols>True</IncludeSymbols>
+    <IncludeSource>True</IncludeSource>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Deterministic>False</Deterministic>
+    <MSBuildVerbosity>diagnostic</MSBuildVerbosity>
+  </PropertyGroup>
+  
+  <!-- Package References -->
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  
+  <!-- Include README.md in the NuGet package -->
+  <ItemGroup>
+    <None Update="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>

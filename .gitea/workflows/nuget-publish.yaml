@@ -1,0 +1,73 @@
+name: Build & Publish NuGet
+
+on:
+  push:
+    branches:
+      - main
+      - v1n
+    tags:
+      - 'v*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0  # Needed for MinVer to see all tags
+
+      - name: Install .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Configure NuGet source
+        run: |
+          dotnet nuget add source "https://gitea.dev.holoncom.eu/api/packages/HolonCom/nuget/index.json" \
+            --name "HolonComGitea" \
+            --username "ian" \
+            --password "${{ secrets.NUGET_API_KEY }}" \
+            --store-password-in-clear-text
+
+      - name: Restore dependencies
+        run: dotnet restore src/Trailblazor.Routing.Core.sln
+
+      - name: Build project
+        run: dotnet build src/Trailblazor.Routing.Core.sln --configuration Release
+
+#      - name: Run tests
+#        run: dotnet test --no-restore --verbosity normal
+
+      - name: Pack NuGet package
+        run: dotnet pack src/Trailblazor.Routing.Core.sln --configuration Release --output out
+
+      - name: Push NuGet package
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/v1n' || startsWith(github.ref, 'refs/tags/v'))
+        run: dotnet nuget push "out/*.nupkg" --source "HolonComGitea" --api-key "${{ secrets.NUGET_API_KEY }}" --skip-duplicate
+
+      - name: Create Gitea Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          REPO_API_KEY: ${{ secrets.REPO_API_KEY }}
+        run: |
+          TAG=${GITHUB_REF#refs/tags/}
+          PACKAGE_VERSION=${TAG#v}
+          
+          # Find the .nupkg file
+          NUPKG_PATH=$(find out -name "*.nupkg" | head -n 1)
+          
+          # Create release
+          curl -X POST "https://gitea.dev.holoncom.eu/api/v1/repos/HolonCom/HolonCom.Core/releases" \
+            -H "Authorization: token ${REPO_API_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"tag_name\": \"${TAG}\",
+              \"name\": \"Release ${PACKAGE_VERSION}\",
+              \"body\": \"Stable release version ${PACKAGE_VERSION}\",
+              \"draft\": false,
+              \"prerelease\": false
+            }"
