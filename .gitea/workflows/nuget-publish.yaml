@@ -3,10 +3,11 @@ name: Build & Publish NuGet
 on:
   push:
     branches:
-      - main
-      - v1n
-      - holoncom/v1n
-      - holoncom/v2n
+      # - main
+      # - v1n
+      # - holoncom/v1n
+      # - holoncom/v2n
+      - ["*"]
     tags:
       - 'v*'
   pull_request:
