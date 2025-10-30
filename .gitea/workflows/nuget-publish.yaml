@@ -32,8 +32,8 @@ jobs:
         run: |
           dotnet nuget add source "https://gitea.dev.holoncom.eu/api/packages/HolonCom/nuget/index.json" \
             --name "HolonComGitea" \
-            --username "ian" \
-            --password "${{ secrets.NUGET_API_KEY }}" \
+            --username "${{ secrets.USERNAME }}" \
+            --password "${{ secrets.TOKEN }}" \
             --store-password-in-clear-text
 
       - name: Restore dependencies
@@ -65,7 +65,7 @@ jobs:
           
           # Create release
           curl -X POST "https://gitea.dev.holoncom.eu/api/v1/repos/HolonCom/HolonCom.Core/releases" \
-            -H "Authorization: token ${REPO_API_KEY}" \
+            -H "Authorization: token ${TOKEN}" \
             -H "Content-Type: application/json" \
             -d "{
               \"tag_name\": \"${TAG}\",
