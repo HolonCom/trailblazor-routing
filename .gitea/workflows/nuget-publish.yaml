@@ -39,14 +39,14 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore src/Trailblazor.Routing.Core.sln
 
-      - name: Build project
-        run: dotnet build src/Trailblazor.Routing.Core.sln --configuration Release
+      - name: Build project (override names)
+        run: dotnet build src/Trailblazor.Routing.Core.sln --configuration Release -p:PackageId=HolonCom.Trailblazor.Routing -p:AssemblyName=HolonCom.Trailblazor.Routing
 
 #      - name: Run tests
 #        run: dotnet test --no-restore --verbosity normal
 
-      - name: Pack NuGet package
-        run: dotnet pack src/Trailblazor.Routing.Core.sln --configuration Release --output out
+      - name: Pack NuGet package (override names)
+        run: dotnet pack src/Trailblazor.Routing.Core.sln --configuration Release -p:PackageId=HolonCom.Trailblazor.Routing -p:AssemblyName=HolonCom.Trailblazor.Routing --output out
 
       - name: Push NuGet package
         if: github.event_name == 'push'
