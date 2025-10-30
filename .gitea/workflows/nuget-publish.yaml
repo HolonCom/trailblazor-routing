@@ -19,12 +19,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Needed for MinVer to see all tags
 
       - name: Install .NET SDK
-        uses: actions/setup-dotnet@v3
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
 
@@ -74,3 +74,17 @@ jobs:
               \"draft\": false,
               \"prerelease\": false
             }"
+
+      # Cleanup BuildKit builders to prevent container accumulation
+      - name: Cleanup BuildKit builders
+        if: always()
+        run: |
+          BUILDER_NAME=$(docker buildx ls | grep -v "^NAME" | awk '{print $1}' | head -1)
+          if [ -n "$BUILDER_NAME" ] && [ "$BUILDER_NAME" != "default" ]; then
+            echo "Removing builder: $BUILDER_NAME"
+            docker buildx rm "$BUILDER_NAME" || true
+          fi
+          
+          # Clean up unused buildkit containers
+          docker ps -a --filter "ancestor=moby/buildkit:buildx-stable-1" --format "{{.ID}}" | xargs -r docker rm -f || true
+            
