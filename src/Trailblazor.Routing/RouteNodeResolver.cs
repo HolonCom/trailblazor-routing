@@ -70,7 +70,15 @@ internal sealed class RouteNodeResolver(
 
     private Regex CreateUriParameterRegexFromUri(string uri)
     {
-        var pattern = Regex.Replace(uri, @"\{(\w+):(\w+)\}", m =>
+        // Catch-all: {*name} captures the remaining path (one or more characters, may contain '/').
+        // Must run before the typed and simple parameter substitutions so "{*x}" is not read as "{x}".
+        var pattern = Regex.Replace(uri, @"\{\*(\w+)\}", m =>
+        {
+            var paramName = m.Groups[1].Value;
+            return $"(?<{paramName}>.+)";
+        });
+
+        pattern = Regex.Replace(pattern, @"\{(\w+):(\w+)\}", m =>
         {
             var paramName = m.Groups[1].Value;
             var paramType = m.Groups[2].Value;
