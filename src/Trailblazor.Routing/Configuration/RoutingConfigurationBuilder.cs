@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System.Diagnostics.CodeAnalysis;
-using System.Xml.Linq;
 using Trailblazor.Routing.Exceptions;
 
 namespace Trailblazor.Routing.Configuration;
