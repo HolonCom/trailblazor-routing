@@ -87,7 +87,7 @@ The `IRoutingOptions` contain settings about the orchestration of the framework.
 Both are accessible through their respective provider services, the `IRoutingOptionsProvider` and `IRoutingConfigurationProvider`.
 
 ## Route Parameters
-There is **full support** for default parameters in the URI like in vanilla Blazor routing. Additionally standard URL query parameters are supported as well. Both types of parameters can be used in tandem or individually.
+There is **full support** for default parameters in the URI like in vanilla Blazor routing (including catch-all `{*name}` parameters). Additionally standard URL query parameters are supported as well. Both types of parameters can be used in tandem or individually.
 
 ### Configuring Route Parameters
 #### 1. The usual way
@@ -145,6 +145,28 @@ The component added as a node in a routing profile. Note that the 'count' parame
 ```cs
 builder.AddNode<Counter>("Counter", "/counter", n => n.WithUris("/counter/{count}"));
 ```
+
+#### 3. Catch-all parameters
+A catch-all parameter `{*name}` captures the **remaining path**, including `/` (one or more characters). Use it when a single segment `{name}` is not enough — for example folder hierarchies under a fixed page route.
+
+Unlike `{name}` (one path segment, no `/`), `{*name}` binds everything after the prefix. Register a base route without the catch-all if that exact URI must resolve separately; the catch-all route alone does not match the prefix with an empty remainder.
+
+```cs
+builder.AddNode<Downloads>("Downloads", "/downloads/2627");
+builder.AddNode<Downloads>("DownloadsPath", "/downloads/2627/{*Path}");
+```
+
+```html
+@code {
+    [Parameter]
+    public string? Path { get; set; }
+}
+```
+
+Examples for the catch-all node:
+- `/downloads/2627/a/b` → `Path` = `a/b`
+- `/downloads/2627/sub` → `Path` = `sub`
+- `/downloads/2627` → matches the base node, not the catch-all
 
 ## Accessing Routing Details
 Accessing the currently navigated to `INode` or parameters from the URI is very simple. The `TrailblazorRouter` always passes down an instance of the `RouterContext` as a cascading value. This cascading parameter will **never** be null.
