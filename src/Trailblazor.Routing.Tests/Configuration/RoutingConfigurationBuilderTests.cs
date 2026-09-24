@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json.Bson;
 using Trailblazor.Routing.Configuration;
 using Trailblazor.Routing.Exceptions;
 using Trailblazor.Routing.Tests.DI;

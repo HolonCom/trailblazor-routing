@@ -3,7 +3,7 @@ name: "Run unit tests"
 on:
   push:
     branches:
-    - "net9/main"
+    - "net10/main"
 
 env:
   TEST_PROJECT: "src/Trailblazor.Routing.Tests/Trailblazor.Routing.Tests.csproj"
@@ -21,7 +21,7 @@ jobs:
     - name: "Setup .NET"
       uses: "actions/setup-dotnet@v4"
       with:
-        dotnet-version: 9.0.x
+        dotnet-version: 10.0.x
 
     - name: "Restore dependencies"
       run: "dotnet restore ${{ env.TEST_PROJECT }}"
